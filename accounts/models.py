@@ -43,7 +43,7 @@ class Known_subject(Subject): #removed subject as primary key?
     gpa = models.FloatField(validators=[MaxValueValidator(0), MinValueValidator(5.0)])
 
 
-class Specialty_Subject(Subject): #wtf is specialty subject?
+class Specialty_Subject(Subject):
     subject = models.OneToOneField(Subject, parent_link=True, on_delete="CASCADE", primary_key=True)
     speciality = models.CharField(max_length=50)
 
@@ -79,7 +79,7 @@ class Booking(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     description = models.CharField(max_length=250)
-    booking_type = models.CharField(max_length=50) #what is this?
+    booking_type = models.CharField(max_length=10)
     pref_platform = models.CharField(max_length=50)
     meeting_place_id = models.ForeignKey(Meeting_Place, on_delete="CASCADE")
     commute_fee = models.FloatField()
@@ -93,8 +93,8 @@ class Invoice(models.Model):
 class Review(models.Model):
     id = models.AutoField(primary_key=True)
     invoice_id = models.OneToOneField(Invoice, to_field=Invoice.id)
-    reviewer = models.OneToOneField(User, to_field=User.email)
-    reviewee = models.OneToOneField(User, to_field=User.email)
+    reviewer = models.OneToOneField(User, to_field=User.first_name)
+    reviewee = models.OneToOneField(User, to_field=User.first_name)
     overall_rating = models.IntegerField(validators=[MaxValueValidator(0), MinValueValidator(5)])
     knowledge = models.CharField(max_length=100)
     explanation = models.CharField(max_length=250)
@@ -108,13 +108,16 @@ class Message(models.Model):
     pass
 
 class Schedule(models.Model):
-    pass
+    booking_id = models.ManyToManyField(Booking, )
 
 class Scheduled_Booking(Booking):
     pass
 
 class Refund_Request:
-    pass
+    id = models.AutoField(primary_key=True)
+    invoice_id = models.OneToOneField(Invoice, to_field=Invoice.id)
+    reason = models.CharField(max_length=250)
+    amount = models.FloatField()
 
 class Meeting(models.Model):
     pass
