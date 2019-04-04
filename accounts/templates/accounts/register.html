@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 {% block body %}
 <div class="jumbotron">
     <h1>Register For Tutorly Here</h1>
@@ -12,9 +12,9 @@
     <form method="post">
         <div class="form-group">
             {% csrf_token %}
-            {{ user_creation_form.as_p }}
+            {{ user_creation_form | crispy}}
             <br>
-            {{ profile_creation_form.as_p }}
+            {{ profile_creation_form | crispy}}
         </div>
         <button class = "btn btn-outline-primary " type="submit">Register</button>
     </form>

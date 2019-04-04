@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 {% block head %}
 <meta charset="utf-8">
 <title>Login to Tutorly</title>
@@ -14,7 +14,7 @@
     <h2>Login:</h2>
       <form method="post">
           {% csrf_token %}
-          {{ form.as_p}}
+          {{ form | crispy }}
           <button class = "btn btn-outline-primary " type="submit" name="button" style="float: right">Login</button>
       </form>
 </div>
