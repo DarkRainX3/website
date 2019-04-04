@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from accounts.forms import RegForm
+from accounts.forms import RegProfile
 # Create your views here.
 def home(request):
     #communicate with django database queries here
@@ -14,13 +14,69 @@ def home(request):
 def new(request):
     return render(request,'accounts/new.html')
 
+def about(request):
+    return render(request,'accounts/about.html')
+
 def register(request):
     if request.method=="POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
+        profile_creation_form = RegProfile(request.POST)
+        user_creation_form = UserCreationForm(request.POST)
+        if profile_creation_form.is_valid() and user_creation_form.is_valid():
+            u = user_creation_form.save()
+            profile_creation_form = RegProfile(request.POST, instance=u.user_profile)
+            profile_creation_form.is_valid()
+            profile_creation_form.save()
+            # profile = profile_creation_form.save(commit=False)
+            # profile.user = u
+            # profile.save()
+
             return redirect('/home')
     else:
-        form = UserCreationForm()
-        args = {'form':form}
-        return render(request, 'accounts/register.html',args)
+        profile_creation_form = RegProfile()
+        user_creation_form= UserCreationForm()
+
+    args = {'profile_creation_form':profile_creation_form, 'user_creation_form':user_creation_form}
+    return render(request, 'accounts/select.html',args)
+    return render(request, 'accounts/register.html',args)
+
+def registerT(request):
+    if request.method=="POST":
+        profile_creation_form = RegProfile(request.POST)
+        user_creation_form = UserCreationForm(request.POST)
+        if profile_creation_form.is_valid() and user_creation_form.is_valid():
+            u = user_creation_form.save()
+            profile_creation_form = RegProfile(request.POST, instance=u.user_profile)
+            profile_creation_form.is_valid()
+            profile_creation_form.save()
+            # profile = profile_creation_form.save(commit=False)
+            # profile.user = u
+            # profile.save()
+
+            return redirect('/home')
+    else:
+        profile_creation_form = RegProfile()
+        user_creation_form= UserCreationForm()
+
+    args = {'profile_creation_form':profile_creation_form, 'user_creation_form':user_creation_form}
+    return render(request, 'accounts/registerT.html',args)
+
+def registerS(request):
+    if request.method=="POST":
+        profile_creation_form = RegProfile(request.POST)
+        user_creation_form = UserCreationForm(request.POST)
+        if profile_creation_form.is_valid() and user_creation_form.is_valid():
+            u = user_creation_form.save()
+            profile_creation_form = RegProfile(request.POST, instance=u.user_profile)
+            profile_creation_form.is_valid()
+            profile_creation_form.save()
+            # profile = profile_creation_form.save(commit=False)
+            # profile.user = u
+            # profile.save()
+
+            return redirect('/home')
+    else:
+        profile_creation_form = RegProfile()
+        user_creation_form= UserCreationForm()
+
+    args = {'profile_creation_form':profile_creation_form, 'user_creation_form':user_creation_form}
+    return render(request, 'accounts/register.html',args)

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from accounts import models
 
 
 class RegForm(UserCreationForm):
@@ -16,6 +17,9 @@ class RegForm(UserCreationForm):
             'password1',
             'password2'
         )
+        # required_fields =(
+        #
+        # )
 
     def save(self, commit = True):
         user = super(RegForm, self).save(commit=False)
@@ -26,3 +30,13 @@ class RegForm(UserCreationForm):
             user.save()
 
         return user
+
+
+class RegProfile(forms.ModelForm):
+    class Meta:
+        model = models.UserProfile
+        # fields = (
+        #     'city',
+        #     'description'
+        # )
+        exclude = ('user',)

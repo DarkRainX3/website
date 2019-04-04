@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="jumbotron">
+    <h1>Register For Tutorly Here</h1>
+</div>
+
+<br>
+<div class="container">
+    <h1>Please Select An Account Type</h1>
+    <!-- <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        Account
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="/home/register">Register</a>
+        <a class="dropdown-item" href="/login">Login</a>
+        <a class="dropdown-item" href="/home/logout">Logout</a>
+      </div>
+    </li> -->
+    <div class="dropdown show">
+      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Select One
+      </a>
+
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="/home/registerS">Student</a>
+        <a class="dropdown-item" href="/home/registerT">Tutor</a>
+      </div>
+    </div>
+    <!-- <form method="post">
+        <div class="form-group">
+            {% csrf_token %}
+            {{ user_creation_form.as_p }}
+            <br>
+            {{ profile_creation_form.as_p }}
+        </div>
+        <button class = "btn btn-outline-primary " type="submit">Register</button>
+    </form> -->
+</div>
+
+
+{% endblock %}
