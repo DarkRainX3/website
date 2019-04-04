@@ -40,3 +40,6 @@ class RegProfile(forms.ModelForm):
         #     'description'
         # )
         exclude = ('user',)
+        # widgets = {
+        #     "date": DateInput()
+        # }

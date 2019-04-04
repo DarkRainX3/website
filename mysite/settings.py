@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'crispy_forms',
     'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -129,3 +130,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/home/'
+
+CRISPY_TEMPLATE_PACK = 'uni_form'

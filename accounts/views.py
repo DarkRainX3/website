@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from accounts.forms import RegProfile
+import datetime
 # Create your views here.
 def home(request):
     #communicate with django database queries here
@@ -80,3 +81,8 @@ def registerS(request):
 
     args = {'profile_creation_form':profile_creation_form, 'user_creation_form':user_creation_form}
     return render(request, 'accounts/register.html',args)
+
+def profile(request, pid):
+    today = datetime.datetime.now().date()
+    args = {'pid':pid, "today":today}
+    return render(request, 'accounts/profile.html',args)

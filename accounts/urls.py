@@ -9,6 +9,6 @@ urlpatterns = [
     url(r'^register/$', views.register,name = 'register'),
     url(r'^registerS/$', views.registerS,name = 'registerStudent'),
     url(r'^registerT/$', views.registerT,name = 'registerTutor'),
-    url(r'^about/$', views.about,name = 'about')
-    # url(r'^logout/$', logout, {"template_name":'accounts/logout.html'})
+    url(r'^about/$', views.about,name = 'about'),
+    url(r'^profile/(\w+)/', views.profile, name = 'profile'),
 ]
