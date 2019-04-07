@@ -18,12 +18,19 @@ from django.conf.urls import url, include
 from django.urls import path
 from django.contrib.auth.views import LoginView
 from mysite import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$', views.home_redirect, name = 'home_redirect'),
     path('admin/', admin.site.urls),
     url(r'^home/', include('accounts.urls')),
     url(r'^login/$', LoginView.as_view(template_name='accounts/login.html'),name='login'),
+    path('', include('accounts.urls')),
+    path('', include('bookings.urls')),
     # url(r'^home/$', LoginView.as_view(template_name='accounts/home.html'),name='home')
     # url(r'^new/$', views.new)
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -7,14 +7,12 @@
 
 <br>
 <div class="container">
-    <h1>Student Registration</h1>
+    <h1>Registration</h1>
     <h1>Please Fill in All Fields</h1>
     <form method="post">
         <div class="form-group">
             {% csrf_token %}
-            {{ user_creation_form | crispy}}
-            <br>
-            {{ profile_creation_form | crispy}}
+            {{ form | crispy}}
         </div>
         <button class = "btn btn-outline-primary " type="submit">Register</button>
     </form>
