@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import Profile
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from datetimewidget.widgets import DateTimeWidget
 
 # Create your models here.
 
@@ -19,15 +20,21 @@ class Meeting_Place(models.Model):
 
 class Booking(models.Model):
     id = models.AutoField(primary_key=True)
-    student_email = models.ForeignKey(Profile, on_delete=models.SET('email'), related_name='student_email') #double check
-    tutor_email = models.ForeignKey(Profile, on_delete=models.SET('email')) #double check
+    student = models.ForeignKey(Profile, on_delete='CASCADE', related_name='student_book', limit_choices_to={'student_flag':True}) #double check
+    tutor = models.ForeignKey(Profile, on_delete='CASCADE', related_name='tutor_book', limit_choices_to={'tutor_flag':True}) #double check
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     description = models.CharField(max_length=250)
     booking_type = models.CharField(max_length=10)
     pref_platform = models.CharField(max_length=50)
-    meeting_place_id = models.ForeignKey(Meeting_Place, on_delete="CASCADE")
+    #meeting_place_id = models.ForeignKey(Meeting_Place, on_delete="CASCADE")
     commute_fee = models.FloatField()
+
+    def fullname_student(self):
+        return "%s %s" % (self.student.first_name, self.student.last_name)
+
+    def fullname_tutor(self):
+        return "%s %s" % (self.tutor.first_name, self.tutor.last_name)
 
 class Invoice(models.Model):
     id = models.AutoField(primary_key=True)

@@ -14,10 +14,10 @@
     </div>
     <div class="container">
         <p>
-            blah blah blah blah blah blah blah <br>
-        blah blah blah blah blah blah blah <br>
-        blah blah blah blah blah blah blah <br>
-        blah blah blah blah blah blah blah
+            {% if user.is_authenticated %}
+            <a href ="{% url 'student_book'%}">Book an Appointment with a Tutor</a> <br>
+            <a href ="{% url 'tutor_book'%}">Book an Appointment with a Student</a>
+            {% endif %}
         </p>
 
     </div>
