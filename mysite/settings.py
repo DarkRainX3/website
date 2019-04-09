@@ -25,7 +25,8 @@ SECRET_KEY = 'tfh(xu9uwk71)@#b91!s5j(q%g-ub9sg%5y2ed_l4nbwpa0g41'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.13.155.94',
+                 '127.0.0.1',]
 
 
 # Application definition
@@ -79,21 +80,21 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',# can change to mysql
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',# can change to mysql
-#         'OPTIONS': {
-#             'read_default_file': "C:\\ProgramData\\MySQL\\MySQL Server 8.0\\my.ini"
-#         }
+#         'ENGINE': 'django.db.backends.sqlite3',# can change to mysql
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',# can change to mysql
+        'OPTIONS': {
+            'read_default_file': "C:\\ProgramData\\MySQL\\MySQL Server 8.0\\my.ini"
+        }
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

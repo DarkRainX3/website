@@ -7,10 +7,10 @@ from PIL import Image
 
 # Create your models here.
 class Profile(models.Model):
-    user = models.OneToOneField(User,on_delete="CASCADE", related_name='profile')
+    user = models.OneToOneField(User,on_delete="CASCADE")
     # first_name = models.CharField(max_length=50, default='First Name')
     # last_name = models.CharField(max_length=50, default='Last Name')
-    email = models.EmailField(unique=True, primary_key=True, null=False, default='')
+    # email = models.EmailField(unique=True, primary_key=True, null=False, default='')
     description = models.CharField(max_length=100, null=True)
     city = models.CharField(max_length=100,default='')
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
@@ -19,10 +19,11 @@ class Profile(models.Model):
     tutor_flag = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return "%s %s" % (self.user.first_name, self.user.last_name)
 
-    def save(self):
-        super().save()
+
+    def save(self, *args, **kwargs):
+        super(Profile, self).save(*args, **kwargs)
         img = Image.open(self.image.path)
 
         if img.height > 300 or img.width > 300:
@@ -30,24 +31,6 @@ class Profile(models.Model):
             img.thumbnail(output_size)
             img.save(self.image.path)
 
-
-# def createProfile(sender,**kwargs):
-#     if kwargs['created']:
-#         user_profile = Profile.objects.create(user=kwargs['instance'])
-
-
-# class User(models.Model):
-#     email = models.CharField(max_length=100, blank=False, unique=True, primary_key=True)
-#     birth_date = models.DateField(max_length=8)
-#     education_level = models.CharField(max_length=100, default='')
-#     first_name = models.CharField(max_length=50)
-#     middle_name = models.CharField(max_length=50)
-#     last_name = models.CharField(max_length=50)
-#     student_flag = models.BooleanField()
-#     tutor_flag = models.BooleanField()
-#
-#     def __str__(self):
-#         return self.email
 
 class Subject(models.Model):
     name = models.CharField(max_length=50, primary_key=True)
@@ -67,18 +50,18 @@ class Specialty_Subject(Subject):
     speciality = models.CharField(max_length=50)
 
 class Tutor_Verification(models.Model):
-    email = models.OneToOneField(Profile, to_field='email', primary_key=True, on_delete="CASCADE")
+    tutor = models.OneToOneField(Profile, primary_key=True, on_delete="CASCADE")
     verification = models.CharField(max_length=100)
 
 class Dependent(models.Model):
-    parent_email = models.OneToOneField(Profile, to_field='email', primary_key=True, on_delete="CASCADE")
+    parent = models.OneToOneField(Profile, primary_key=True, on_delete="CASCADE")
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-
-class Tutor_Teach_Student(models.Model): #not sure if this table is correct
-    tutor = models.OneToOneField(Profile, to_field='email', on_delete="CASCADE", related_name='tutor')
-    student = models.OneToOneField(Profile, to_field='email', on_delete="CASCADE", related_name='student')
+#
+# class Tutor_Teach_Student(models.Model): #not sure if this table is correct
+#     tutor = models.OneToOneField(Profile, to_field='email', on_delete="CASCADE", related_name='tutor')
+#     student = models.OneToOneField(Profile, to_field='email', on_delete="CASCADE", related_name='student')
 
 
 

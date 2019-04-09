@@ -2,7 +2,6 @@ from django.db import models
 from accounts.models import Profile
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
-from datetimewidget.widgets import DateTimeWidget
 
 # Create your models here.
 
@@ -20,21 +19,22 @@ class Meeting_Place(models.Model):
 
 class Booking(models.Model):
     id = models.AutoField(primary_key=True)
-    student = models.ForeignKey(Profile, on_delete='CASCADE', related_name='student_book', limit_choices_to={'student_flag':True}) #double check
-    tutor = models.ForeignKey(Profile, on_delete='CASCADE', related_name='tutor_book', limit_choices_to={'tutor_flag':True}) #double check
+    created_by = models.ForeignKey(User, on_delete='CASCADE', null=True)
+    student = models.ForeignKey(Profile, on_delete='CASCADE', related_name='student_book', limit_choices_to={'student_flag':True}, to_field='user', null=True) #double check
+    tutor = models.ForeignKey(Profile, on_delete='CASCADE', related_name='tutor_book', limit_choices_to={'tutor_flag':True}, to_field='user', null=True) #double check
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     description = models.CharField(max_length=250)
     booking_type = models.CharField(max_length=10)
     pref_platform = models.CharField(max_length=50)
     #meeting_place_id = models.ForeignKey(Meeting_Place, on_delete="CASCADE")
-    commute_fee = models.FloatField()
+    #commute_fee = models.FloatField()
 
-    def fullname_student(self):
-        return "%s %s" % (self.student.first_name, self.student.last_name)
-
-    def fullname_tutor(self):
-        return "%s %s" % (self.tutor.first_name, self.tutor.last_name)
+    # def fullname_student(self):
+    #     return "%s %s" % (self.student.first_name, self.student.last_name)
+    #
+    # def fullname_tutor(self):
+    #     return "%s %s" % (self.tutor.first_name, self.tutor.last_name)
 
 class Invoice(models.Model):
     id = models.AutoField(primary_key=True)
@@ -45,8 +45,8 @@ class Invoice(models.Model):
 class Review(models.Model):
     id = models.AutoField(primary_key=True)
     invoice_id = models.OneToOneField(Invoice, to_field='id', on_delete="CASCADE")
-    reviewer = models.OneToOneField(Profile, to_field='email', on_delete="CASCADE", related_name='reviewer')
-    reviewee = models.OneToOneField(Profile, to_field='email', on_delete="CASCADE", related_name='reviewee')
+    reviewer = models.OneToOneField(Profile, on_delete="CASCADE", related_name='reviewer')
+    reviewee = models.OneToOneField(Profile, on_delete="CASCADE", related_name='reviewee')
     overall_rating = models.IntegerField(validators=[MaxValueValidator(0), MinValueValidator(5)])
     knowledge = models.CharField(max_length=100)
     explanation = models.CharField(max_length=250)

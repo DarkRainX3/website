@@ -1,24 +1,25 @@
 {% extends "base.html" %} <!--extends base template inheritance -->
 {% block content %}
-    {% for booking in bookings %} <!--loop over posts in post dictionary -->
-        {% if booking.student == profile or booking.tutor == profile %}
-            <article class="media content-section">
-              <div class="media-body">
-                <div class="article-metadata">
-                  <a class="mr-2" href="#">Booking {{ booking.id }}</a> <br>
-    {#              <small class="text-muted">Tutor: {{ booking.tutor_email }}</small>#}
-    {#                <small class="text-muted">Student: {{ booking.student_email }}</small>#}
-                </div>
-    {#            <h2><a class="article-title" href="{% url 'booking-detail' booking.id%}">{{ booking.tutor_email }}</a></h2>#}
-                <p class="article-content">Tutor: {{ booking.tutor_email }} <br>
-                    Student: {{ booking.student_email }} <br>
-                    Start Time: {{ booking.start_time }} <br>
-                    End Time: {{ booking.end_time }} <br>
-                    Description: {{ booking.description }} <br> <br>
-                </p>
-              </div>
-            </article>
-        {% endif %}
-    {% endfor %}
-
+    <div class ='container'>
+        {% for booking in bookings %} <!--loop over posts in post dictionary -->
+            {% if booking.student == user.profile or booking.tutor == user.profile %}
+                <article class="media content-section">
+                  <div class="media-body">
+                    <div class="article-metadata">
+                      <a class="mr-2" href="#">Booking {{ booking.id }}</a> <br>
+        {#              <small class="text-muted">Tutor: {{ booking.tutor_email }}</small>#}
+        {#                <small class="text-muted">Student: {{ booking.student_email }}</small>#}
+                    </div>
+        {#            <h2><a class="article-title" href="{% url 'booking-detail' booking.id%}">{{ booking.tutor_email }}</a></h2>#}
+                    <p class="article-content">Tutor: {{ booking.tutor }} <br>
+                        Student: {{ booking.student }} <br>
+                        Start Time: {{ booking.start_time }} <br>
+                        End Time: {{ booking.end_time }} <br>
+                        Description: {{ booking.description }} <br> <br>
+                    </p>
+                  </div>
+                </article>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock content %}

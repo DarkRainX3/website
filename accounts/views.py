@@ -3,8 +3,10 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.db import IntegrityError
 import datetime
+from .models import Profile
 # Create your views here.
 
 
@@ -61,6 +63,15 @@ def profile(request):
 
     return render(request, 'accounts/profile.html', context)
 
+def search(request):
+    query = request.GET.get('q')
+    qs = Profile.objects.all()
+    if query is not None:
+        qs = qs.filter(user__first_name__icontains=query).filter(tutor_flag__exact=True)
+    context={
+        'tutors': qs
+    }
+    return render(request, 'accounts/search.html', context)
 
 # def register(request):
 #     if request.method=="POST":

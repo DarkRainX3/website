@@ -24,7 +24,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^$', views.home_redirect, name = 'home_redirect'),
     path('admin/', admin.site.urls),
-    url(r'^home/', include('accounts.urls')),
+    url(r'^home/', include('accounts.urls'), name='home'),
     url(r'^login/$', LoginView.as_view(template_name='accounts/login.html'),name='login'),
     path('', include('accounts.urls')),
     path('', include('bookings.urls')),

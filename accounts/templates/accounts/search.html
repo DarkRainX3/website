@@ -1,0 +1,20 @@
+{% extends "base.html" %} <!--extends base template inheritance -->
+{% block content %}
+    <div class ='container'>
+        {% for tutor in tutors %} <!--loop over posts in post dictionary -->
+            <article class="media content-section">
+              <div class="media-body">
+                <div class="article-metadata">
+                  <a class="mr-2" href="#">Tutor: {{ tutor.user.first_name }}</a> <br>
+    {#              <small class="text-muted">Tutor: {{ booking.tutor_email }}</small>#}
+    {#                <small class="text-muted">Student: {{ booking.student_email }}</small>#}
+                </div>
+    {#            <h2><a class="article-title" href="{% url 'booking-detail' booking.id%}">{{ booking.tutor_email }}</a></h2>#}
+                <p class="article-content">Education: {{ tutor.education }} <br>
+                    Description: {{ booking.description }} <br> <br>
+                </p>
+              </div>
+            </article>
+        {% endfor %}
+    </div>
+{% endblock content %}
