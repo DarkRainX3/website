@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse
+
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -7,6 +9,10 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 import datetime
 from .models import Profile
+from django.views.generic import (
+    ListView, DetailView, CreateView, UpdateView)
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Known_subject
 # Create your views here.
 
 
@@ -72,6 +78,54 @@ def search(request):
         'tutors': qs
     }
     return render(request, 'accounts/search.html', context)
+
+class SubjectCreateView(LoginRequiredMixin, CreateView):
+    model = Known_subject
+    template_name = 'accounts/subject_form.html'
+    fields = ['subject', 'knowledge_level', 'school', 'graduation_year', 'gpa', 'specialty']
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.tutor = self.request.user.profile
+        instance.save()
+        return super().form_valid(instance)
+
+    #
+    # def form_valid(self, form):
+    #     # form.instance.created_by = self.request.user
+    #     instance = form.save(commit=False)
+    #     instance.created_by = self.request.user
+    #     instance.save()
+    #     return super().form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request, 'Subjects created successfully')
+        return reverse('home_redirect')
+
+class SubjectListView(LoginRequiredMixin, ListView):
+    model = Known_subject
+    template_name = 'accounts/subject_list.html'
+    context_object_name = 'subjects'
+
+
+
+
+# class Subject(models.Model):
+#     name = models.CharField(max_length=50, primary_key=True)
+#     tutor = models.ManyToManyField(Profile, through='Tutor_Subjects')
+#
+# class Tutor_Subjects(models.Model):
+#     tutor = models.ForeignKey(Profile, on_delete="CASCADE")
+#     subject = models.ForeignKey(Subject, on_delete="CASCADE")
+#
+# class Known_subject(models.Model): #removed subject as primary key?
+#     id = models.AutoField(primary_key=True, default="")
+#     subject = models.ForeignKey(Subject, on_delete="CASCADE")
+#     knowledge_level = models.CharField(max_length=50)
+#     school = models.CharField(max_length=100)
+#     graduation_year = models.IntegerField(validators=[MaxValueValidator(2050), MinValueValidator(1900)])
+#     gpa = models.FloatField(validators=[MaxValueValidator(0), MinValueValidator(5.0)])
+
 
 # def register(request):
 #     if request.method=="POST":

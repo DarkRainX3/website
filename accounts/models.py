@@ -8,9 +8,6 @@ from PIL import Image
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User,on_delete="CASCADE")
-    # first_name = models.CharField(max_length=50, default='First Name')
-    # last_name = models.CharField(max_length=50, default='Last Name')
-    # email = models.EmailField(unique=True, primary_key=True, null=False, default='')
     description = models.CharField(max_length=100, null=True)
     city = models.CharField(max_length=100,default='')
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
@@ -35,28 +32,44 @@ class Profile(models.Model):
 class Subject(models.Model):
     name = models.CharField(max_length=50, primary_key=True)
 
+    def __str__(self):
+        return self.name
 
-class Known_subject(Subject): #removed subject as primary key?
-    subject = models.OneToOneField(Subject, parent_link=True, on_delete="CASCADE")
-    tutor = models.ManyToManyField(Profile)
-    knowledge_level = models.CharField(max_length=50)
+    # tutor = models.ManyToManyField(Profile, through='Tutor_Subjects')
+
+# class Tutor_Subjects(models.Model):
+#     tutor = models.ForeignKey(Profile, on_delete="CASCADE")
+#     subject = models.ForeignKey(Subject, on_delete="CASCADE")
+
+kl_choices = (('basic', 'Basic'),('int', 'Intermediate'),
+              ('adv', 'Advanced'), ('exp', 'Expert'), ('god', 'God'),)
+
+class Known_subject(models.Model): #removed subject as primary key?
+    id = models.AutoField(primary_key=True, default="")
+    subject = models.ForeignKey(Subject, on_delete="CASCADE")
+    tutor = models.OneToOneField(Profile, to_field='user', limit_choices_to={'tutor_flag':True}, on_delete='CASCADE')
+    knowledge_level = models.CharField(max_length=50, choices=kl_choices)
     school = models.CharField(max_length=100)
-    graduation_year = models.IntegerField(validators=[MaxValueValidator(2050), MinValueValidator(1900)])
-    gpa = models.FloatField(validators=[MaxValueValidator(0), MinValueValidator(5.0)])
+    graduation_year = models.IntegerField(validators=[MaxValueValidator(2050), MinValueValidator(1900)],
+                                          blank=True, null=True)
+    gpa = models.FloatField(validators=[MaxValueValidator(0), MinValueValidator(5.0)], blank=True, null=True)
+    specialty = models.CharField(max_length=50, default="", blank=True, null=True)
 
+    def __str__(self):
+        return "%s %s" % (self.subject, self.knowledge_level)
 
-class Specialty_Subject(Subject):
-    subject = models.OneToOneField(Subject, parent_link=True, on_delete="CASCADE", primary_key=True)
-    speciality = models.CharField(max_length=50)
+# class Specialty_Subject(models.Model):
+#     subject = models.OneToOneField(Subject, parent_link=True, on_delete="CASCADE", primary_key=True)
+#     speciality = models.CharField(max_length=50)
 
 class Tutor_Verification(models.Model):
     tutor = models.OneToOneField(Profile, primary_key=True, on_delete="CASCADE")
-    verification = models.CharField(max_length=100)
+    verification = models.BooleanField(default=False)
 
 class Dependent(models.Model):
     parent = models.OneToOneField(Profile, primary_key=True, on_delete="CASCADE")
     first_name = models.CharField(max_length=50)
-    middle_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50, null=True)
     last_name = models.CharField(max_length=50)
 #
 # class Tutor_Teach_Student(models.Model): #not sure if this table is correct

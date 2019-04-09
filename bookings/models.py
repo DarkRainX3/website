@@ -5,6 +5,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 
+platform_choices = (('online', 'Online'), ('ip', 'In-Person'))
 
 class Meeting_Place(models.Model):
     id = models.AutoField(primary_key=True)
@@ -22,11 +23,11 @@ class Booking(models.Model):
     created_by = models.ForeignKey(User, on_delete='CASCADE', null=True)
     student = models.ForeignKey(Profile, on_delete='CASCADE', related_name='student_book', limit_choices_to={'student_flag':True}, to_field='user', null=True) #double check
     tutor = models.ForeignKey(Profile, on_delete='CASCADE', related_name='tutor_book', limit_choices_to={'tutor_flag':True}, to_field='user', null=True) #double check
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start_time = models.DateTimeField(help_text='YYYY/MM/DD hh:mm')
+    end_time = models.DateTimeField(help_text='YYYY/MM/DD hh:mm')
     description = models.CharField(max_length=250)
     booking_type = models.CharField(max_length=10)
-    pref_platform = models.CharField(max_length=50)
+    pref_platform = models.CharField(max_length=50, choices=platform_choices)
     #meeting_place_id = models.ForeignKey(Meeting_Place, on_delete="CASCADE")
     #commute_fee = models.FloatField()
 

@@ -16,4 +16,7 @@ urlpatterns = [
     url(r'^about/$', views.about,name = 'about'),
     #url(r'^profile/(\w+)/', views.profile, name = 'profile'),
     path('profile/', views.profile, name='profile'),
+    url(r'^subject_list/$', views.SubjectListView.as_view(), name='subject_list'),
+    url(r'^add_subjects/$', views.SubjectCreateView.as_view(), name='add_subjects'),
+
 ]

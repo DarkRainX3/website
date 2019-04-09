@@ -47,6 +47,7 @@ class BookCreateView_Tutor(LoginRequiredMixin, CreateView):
         instance.save()
         return super().form_valid(form)
 
+
     def get_form(self, form_class=None):
         form = super(BookCreateView_Tutor, self).get_form(form_class=None)
         # form.fields['start_time'].widget = widgets.AdminSplitDateTime()

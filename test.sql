@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `tutorly` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
-USE `tutorly`;
 -- MySQL dump 10.13  Distrib 8.0.13, for Win64 (x86_64)
 --
 -- Host: localhost    Database: tutorly
@@ -57,7 +55,7 @@ CREATE TABLE `accounts_known_subject` (
   `graduation_year` int(11) NOT NULL,
   `gpa` double NOT NULL,
   PRIMARY KEY (`subject_id`),
-  CONSTRAINT `accounts_known_subje_subject_id_f3716ac5_fk_accounts_` FOREIGN KEY (`subject_id`) REFERENCES `accounts_subject` (`name`)
+  CONSTRAINT `accounts_known_subje_subject_id_f3716ac5_fk_accounts_` FOREIGN KEY (`subject_id`) REFERENCES `delete` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -68,34 +66,6 @@ CREATE TABLE `accounts_known_subject` (
 LOCK TABLES `accounts_known_subject` WRITE;
 /*!40000 ALTER TABLE `accounts_known_subject` DISABLE KEYS */;
 /*!40000 ALTER TABLE `accounts_known_subject` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `accounts_known_subject_tutor`
---
-
-DROP TABLE IF EXISTS `accounts_known_subject_tutor`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE `accounts_known_subject_tutor` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `known_subject_id` varchar(50) NOT NULL,
-  `profile_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `accounts_known_subject_t_known_subject_id_profile_89c4fb04_uniq` (`known_subject_id`,`profile_id`),
-  KEY `accounts_known_subje_profile_id_5008a1ac_fk_accounts_` (`profile_id`),
-  CONSTRAINT `accounts_known_subje_known_subject_id_ef107fb6_fk_accounts_` FOREIGN KEY (`known_subject_id`) REFERENCES `accounts_known_subject` (`subject_id`),
-  CONSTRAINT `accounts_known_subje_profile_id_5008a1ac_fk_accounts_` FOREIGN KEY (`profile_id`) REFERENCES `accounts_profile` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `accounts_known_subject_tutor`
---
-
-LOCK TABLES `accounts_known_subject_tutor` WRITE;
-/*!40000 ALTER TABLE `accounts_known_subject_tutor` DISABLE KEYS */;
-/*!40000 ALTER TABLE `accounts_known_subject_tutor` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -117,7 +87,7 @@ CREATE TABLE `accounts_profile` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `accounts_profile_user_id_49a85d32_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -126,7 +96,7 @@ CREATE TABLE `accounts_profile` (
 
 LOCK TABLES `accounts_profile` WRITE;
 /*!40000 ALTER TABLE `accounts_profile` DISABLE KEYS */;
-INSERT INTO `accounts_profile` VALUES (1,'faa','YYC','default.jpg','high school',1,1,1),(2,NULL,'','default.jpg','',0,1,2),(3,'im somebody','calgary','default.jpg','PhD in Gender Studies',1,1,3),(4,NULL,'','default.jpg','',0,0,4),(5,NULL,'','default.jpg','',0,0,5),(6,NULL,'','default.jpg','',0,0,6);
+INSERT INTO `accounts_profile` VALUES (1,'MEng Student','Calgary','default.jpg','University',1,1,1),(2,'MEng Student','Calgary','default.jpg','University',0,1,2),(3,'MEng Student','Calgary','default.jpg','University',1,1,3),(4,'Pro Hockey Player','Boston','default.jpg','High School',0,0,4),(5,'Pro Basketball Player','San Francisco','default.jpg','High School',0,0,5),(6,'I bring balance to the universe','Titan','default.jpg','University',0,0,6),(7,'Founder of Microsoft','Seattle','default.jpg','University',0,1,7),(8,'I teach Python on Youtube','Boulder','default.jpg','University',0,1,8);
 /*!40000 ALTER TABLE `accounts_profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,7 +111,7 @@ CREATE TABLE `accounts_specialty_subject` (
   `subject_id` varchar(50) NOT NULL,
   `speciality` varchar(50) NOT NULL,
   PRIMARY KEY (`subject_id`),
-  CONSTRAINT `accounts_specialty_s_subject_id_f0a2bb51_fk_accounts_` FOREIGN KEY (`subject_id`) REFERENCES `accounts_subject` (`name`)
+  CONSTRAINT `accounts_specialty_s_subject_id_f0a2bb51_fk_accounts_` FOREIGN KEY (`subject_id`) REFERENCES `delete` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -173,7 +143,59 @@ CREATE TABLE `accounts_subject` (
 
 LOCK TABLES `accounts_subject` WRITE;
 /*!40000 ALTER TABLE `accounts_subject` DISABLE KEYS */;
+INSERT INTO `accounts_subject` VALUES ('Accounting'),('Big Data'),('Biology 30'),('Chemistry 30'),('Fluid Mechanics'),('Machine Learning'),('Math K-12'),('Physics 30'),('Programming'),('Science K-12'),('Thermodynamics'),('Web Development');
 /*!40000 ALTER TABLE `accounts_subject` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `accounts_subject_tutor`
+--
+
+DROP TABLE IF EXISTS `accounts_subject_tutor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `accounts_subject_tutor` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subject_id` varchar(50) NOT NULL,
+  `profile_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `accounts_subject_tutor_subject_id_profile_id_cd809f70_uniq` (`subject_id`,`profile_id`),
+  KEY `accounts_subject_tut_profile_id_46bc8a75_fk_accounts_` (`profile_id`),
+  CONSTRAINT `accounts_subject_tut_profile_id_46bc8a75_fk_accounts_` FOREIGN KEY (`profile_id`) REFERENCES `accounts_profile` (`id`),
+  CONSTRAINT `accounts_subject_tut_subject_id_731b8355_fk_accounts_` FOREIGN KEY (`subject_id`) REFERENCES `accounts_subject` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `accounts_subject_tutor`
+--
+
+LOCK TABLES `accounts_subject_tutor` WRITE;
+/*!40000 ALTER TABLE `accounts_subject_tutor` DISABLE KEYS */;
+INSERT INTO `accounts_subject_tutor` VALUES (2,'Web Development',3);
+/*!40000 ALTER TABLE `accounts_subject_tutor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `accounts_tutor_subjects`
+--
+
+DROP TABLE IF EXISTS `accounts_tutor_subjects`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `accounts_tutor_subjects` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `accounts_tutor_subjects`
+--
+
+LOCK TABLES `accounts_tutor_subjects` WRITE;
+/*!40000 ALTER TABLE `accounts_tutor_subjects` DISABLE KEYS */;
+/*!40000 ALTER TABLE `accounts_tutor_subjects` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -267,7 +289,7 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -276,7 +298,7 @@ CREATE TABLE `auth_permission` (
 
 LOCK TABLES `auth_permission` WRITE;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add booking',1,'add_booking'),(2,'Can change booking',1,'change_booking'),(3,'Can delete booking',1,'delete_booking'),(4,'Can view booking',1,'view_booking'),(5,'Can add booking_ message_ logs',2,'add_booking_message_logs'),(6,'Can change booking_ message_ logs',2,'change_booking_message_logs'),(7,'Can delete booking_ message_ logs',2,'delete_booking_message_logs'),(8,'Can view booking_ message_ logs',2,'view_booking_message_logs'),(9,'Can add booking_ offer',3,'add_booking_offer'),(10,'Can change booking_ offer',3,'change_booking_offer'),(11,'Can delete booking_ offer',3,'delete_booking_offer'),(12,'Can view booking_ offer',3,'view_booking_offer'),(13,'Can add invoice',4,'add_invoice'),(14,'Can change invoice',4,'change_invoice'),(15,'Can delete invoice',4,'delete_invoice'),(16,'Can view invoice',4,'view_invoice'),(17,'Can add meeting',5,'add_meeting'),(18,'Can change meeting',5,'change_meeting'),(19,'Can delete meeting',5,'delete_meeting'),(20,'Can view meeting',5,'view_meeting'),(21,'Can add meeting_ place',6,'add_meeting_place'),(22,'Can change meeting_ place',6,'change_meeting_place'),(23,'Can delete meeting_ place',6,'delete_meeting_place'),(24,'Can view meeting_ place',6,'view_meeting_place'),(25,'Can add message',7,'add_message'),(26,'Can change message',7,'change_message'),(27,'Can delete message',7,'delete_message'),(28,'Can view message',7,'view_message'),(29,'Can add review',8,'add_review'),(30,'Can change review',8,'change_review'),(31,'Can delete review',8,'delete_review'),(32,'Can view review',8,'view_review'),(33,'Can add schedule',9,'add_schedule'),(34,'Can change schedule',9,'change_schedule'),(35,'Can delete schedule',9,'delete_schedule'),(36,'Can view schedule',9,'view_schedule'),(37,'Can add desired_ meeting_ place',10,'add_desired_meeting_place'),(38,'Can change desired_ meeting_ place',10,'change_desired_meeting_place'),(39,'Can delete desired_ meeting_ place',10,'delete_desired_meeting_place'),(40,'Can view desired_ meeting_ place',10,'view_desired_meeting_place'),(41,'Can add scheduled_ booking',11,'add_scheduled_booking'),(42,'Can change scheduled_ booking',11,'change_scheduled_booking'),(43,'Can delete scheduled_ booking',11,'delete_scheduled_booking'),(44,'Can view scheduled_ booking',11,'view_scheduled_booking'),(45,'Can add profile',12,'add_profile'),(46,'Can change profile',12,'change_profile'),(47,'Can delete profile',12,'delete_profile'),(48,'Can view profile',12,'view_profile'),(49,'Can add subject',13,'add_subject'),(50,'Can change subject',13,'change_subject'),(51,'Can delete subject',13,'delete_subject'),(52,'Can view subject',13,'view_subject'),(53,'Can add dependent',14,'add_dependent'),(54,'Can change dependent',14,'change_dependent'),(55,'Can delete dependent',14,'delete_dependent'),(56,'Can view dependent',14,'view_dependent'),(57,'Can add known_subject',15,'add_known_subject'),(58,'Can change known_subject',15,'change_known_subject'),(59,'Can delete known_subject',15,'delete_known_subject'),(60,'Can view known_subject',15,'view_known_subject'),(61,'Can add specialty_ subject',16,'add_specialty_subject'),(62,'Can change specialty_ subject',16,'change_specialty_subject'),(63,'Can delete specialty_ subject',16,'delete_specialty_subject'),(64,'Can view specialty_ subject',16,'view_specialty_subject'),(65,'Can add tutor_ verification',17,'add_tutor_verification'),(66,'Can change tutor_ verification',17,'change_tutor_verification'),(67,'Can delete tutor_ verification',17,'delete_tutor_verification'),(68,'Can view tutor_ verification',17,'view_tutor_verification'),(69,'Can add log entry',18,'add_logentry'),(70,'Can change log entry',18,'change_logentry'),(71,'Can delete log entry',18,'delete_logentry'),(72,'Can view log entry',18,'view_logentry'),(73,'Can add permission',19,'add_permission'),(74,'Can change permission',19,'change_permission'),(75,'Can delete permission',19,'delete_permission'),(76,'Can view permission',19,'view_permission'),(77,'Can add group',20,'add_group'),(78,'Can change group',20,'change_group'),(79,'Can delete group',20,'delete_group'),(80,'Can view group',20,'view_group'),(81,'Can add user',21,'add_user'),(82,'Can change user',21,'change_user'),(83,'Can delete user',21,'delete_user'),(84,'Can view user',21,'view_user'),(85,'Can add content type',22,'add_contenttype'),(86,'Can change content type',22,'change_contenttype'),(87,'Can delete content type',22,'delete_contenttype'),(88,'Can view content type',22,'view_contenttype'),(89,'Can add session',23,'add_session'),(90,'Can change session',23,'change_session'),(91,'Can delete session',23,'delete_session'),(92,'Can view session',23,'view_session');
+INSERT INTO `auth_permission` VALUES (1,'Can add booking',1,'add_booking'),(2,'Can change booking',1,'change_booking'),(3,'Can delete booking',1,'delete_booking'),(4,'Can view booking',1,'view_booking'),(5,'Can add booking_ message_ logs',2,'add_booking_message_logs'),(6,'Can change booking_ message_ logs',2,'change_booking_message_logs'),(7,'Can delete booking_ message_ logs',2,'delete_booking_message_logs'),(8,'Can view booking_ message_ logs',2,'view_booking_message_logs'),(9,'Can add booking_ offer',3,'add_booking_offer'),(10,'Can change booking_ offer',3,'change_booking_offer'),(11,'Can delete booking_ offer',3,'delete_booking_offer'),(12,'Can view booking_ offer',3,'view_booking_offer'),(13,'Can add invoice',4,'add_invoice'),(14,'Can change invoice',4,'change_invoice'),(15,'Can delete invoice',4,'delete_invoice'),(16,'Can view invoice',4,'view_invoice'),(17,'Can add meeting',5,'add_meeting'),(18,'Can change meeting',5,'change_meeting'),(19,'Can delete meeting',5,'delete_meeting'),(20,'Can view meeting',5,'view_meeting'),(21,'Can add meeting_ place',6,'add_meeting_place'),(22,'Can change meeting_ place',6,'change_meeting_place'),(23,'Can delete meeting_ place',6,'delete_meeting_place'),(24,'Can view meeting_ place',6,'view_meeting_place'),(25,'Can add message',7,'add_message'),(26,'Can change message',7,'change_message'),(27,'Can delete message',7,'delete_message'),(28,'Can view message',7,'view_message'),(29,'Can add review',8,'add_review'),(30,'Can change review',8,'change_review'),(31,'Can delete review',8,'delete_review'),(32,'Can view review',8,'view_review'),(33,'Can add schedule',9,'add_schedule'),(34,'Can change schedule',9,'change_schedule'),(35,'Can delete schedule',9,'delete_schedule'),(36,'Can view schedule',9,'view_schedule'),(37,'Can add desired_ meeting_ place',10,'add_desired_meeting_place'),(38,'Can change desired_ meeting_ place',10,'change_desired_meeting_place'),(39,'Can delete desired_ meeting_ place',10,'delete_desired_meeting_place'),(40,'Can view desired_ meeting_ place',10,'view_desired_meeting_place'),(41,'Can add scheduled_ booking',11,'add_scheduled_booking'),(42,'Can change scheduled_ booking',11,'change_scheduled_booking'),(43,'Can delete scheduled_ booking',11,'delete_scheduled_booking'),(44,'Can view scheduled_ booking',11,'view_scheduled_booking'),(45,'Can add profile',12,'add_profile'),(46,'Can change profile',12,'change_profile'),(47,'Can delete profile',12,'delete_profile'),(48,'Can view profile',12,'view_profile'),(49,'Can add subject',13,'add_subject'),(50,'Can change subject',13,'change_subject'),(51,'Can delete subject',13,'delete_subject'),(52,'Can view subject',13,'view_subject'),(53,'Can add dependent',14,'add_dependent'),(54,'Can change dependent',14,'change_dependent'),(55,'Can delete dependent',14,'delete_dependent'),(56,'Can view dependent',14,'view_dependent'),(57,'Can add known_subject',15,'add_known_subject'),(58,'Can change known_subject',15,'change_known_subject'),(59,'Can delete known_subject',15,'delete_known_subject'),(60,'Can view known_subject',15,'view_known_subject'),(61,'Can add specialty_ subject',16,'add_specialty_subject'),(62,'Can change specialty_ subject',16,'change_specialty_subject'),(63,'Can delete specialty_ subject',16,'delete_specialty_subject'),(64,'Can view specialty_ subject',16,'view_specialty_subject'),(65,'Can add tutor_ verification',17,'add_tutor_verification'),(66,'Can change tutor_ verification',17,'change_tutor_verification'),(67,'Can delete tutor_ verification',17,'delete_tutor_verification'),(68,'Can view tutor_ verification',17,'view_tutor_verification'),(69,'Can add log entry',18,'add_logentry'),(70,'Can change log entry',18,'change_logentry'),(71,'Can delete log entry',18,'delete_logentry'),(72,'Can view log entry',18,'view_logentry'),(73,'Can add permission',19,'add_permission'),(74,'Can change permission',19,'change_permission'),(75,'Can delete permission',19,'delete_permission'),(76,'Can view permission',19,'view_permission'),(77,'Can add group',20,'add_group'),(78,'Can change group',20,'change_group'),(79,'Can delete group',20,'delete_group'),(80,'Can view group',20,'view_group'),(81,'Can add user',21,'add_user'),(82,'Can change user',21,'change_user'),(83,'Can delete user',21,'delete_user'),(84,'Can view user',21,'view_user'),(85,'Can add content type',22,'add_contenttype'),(86,'Can change content type',22,'change_contenttype'),(87,'Can delete content type',22,'delete_contenttype'),(88,'Can view content type',22,'view_contenttype'),(89,'Can add session',23,'add_session'),(90,'Can change session',23,'change_session'),(91,'Can delete session',23,'delete_session'),(92,'Can view session',23,'view_session'),(93,'Can add tutor_ subjects',24,'add_tutor_subjects'),(94,'Can change tutor_ subjects',24,'change_tutor_subjects'),(95,'Can delete tutor_ subjects',24,'delete_tutor_subjects'),(96,'Can view tutor_ subjects',24,'view_tutor_subjects');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -301,7 +323,7 @@ CREATE TABLE `auth_user` (
   `date_joined` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -310,7 +332,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$150000$pXxTzH0cS8ur$Ex5RxaBK2ngU6EXAosqvMqIRMcD1uFFpruVdRz0HFt0=','2019-04-08 20:21:38.232263',1,'dtang','David','Tang','david.tang@ucalgary.ca',1,1,'2019-04-08 20:17:19.844923'),(2,'pbkdf2_sha256$150000$nvND7wBYLLOs$92zIlvapgbxVldy54v3s0h4sbdpJeZfw/h59EZkNyWo=','2019-04-08 21:05:31.924706',0,'test','test1','test1','test1@123.com',0,1,'2019-04-08 20:33:12.509357'),(3,'pbkdf2_sha256$150000$OXAEHVDoTAkr$p26yso9FD0XYjka6ALytIqJiVcoPwYc9Clt+05UeDHc=','2019-04-08 20:47:49.562349',0,'test2','test2','test2','test2@123.com',0,1,'2019-04-08 20:34:05.670036'),(4,'pbkdf2_sha256$150000$fbVQ4KEGCypw$FmuF15cDbjmzGW95hBdoRe1WlhuUp4K1n9tBN7nvIJs=',NULL,0,'test3','test3','test3','test3@123.com',0,1,'2019-04-08 20:34:05.785882'),(5,'pbkdf2_sha256$150000$G9L1mCmE7MHl$Khx49AW9FJdYMg+nhSxMGHHrghoQNWsBbw55Qm8qDPg=',NULL,0,'test4','test4','test4','test4@123.com',0,1,'2019-04-08 20:34:05.897731'),(6,'pbkdf2_sha256$150000$D8nUGECkJzyE$+T6i2rqkTVNJp2wkDOyfziZC8HqrPunLe6EoNU1g1bo=',NULL,0,'test5','test5','test5','test5@123.com',0,1,'2019-04-08 20:34:06.013578');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$120000$pyXKe7wtx34c$jqoSMdrWfU22TkYUFJkGPK/pXYeY5Ys4mxeiSK7XOow=','2019-04-09 03:37:53.359850',1,'dtang','David','Tang','david.tang@ucalgary.ca',1,1,'2019-04-08 20:17:19.844923'),(2,'pbkdf2_sha256$150000$nvND7wBYLLOs$92zIlvapgbxVldy54v3s0h4sbdpJeZfw/h59EZkNyWo=','2019-04-08 21:05:31.924706',0,'test','Waley','Chen','test1@123.com',0,1,'2019-04-08 20:33:12.509357'),(3,'pbkdf2_sha256$150000$OXAEHVDoTAkr$p26yso9FD0XYjka6ALytIqJiVcoPwYc9Clt+05UeDHc=','2019-04-08 20:47:49.562349',0,'test2','Karm','Sidhu','test2@123.com',0,1,'2019-04-08 20:34:05.670036'),(4,'pbkdf2_sha256$150000$fbVQ4KEGCypw$FmuF15cDbjmzGW95hBdoRe1WlhuUp4K1n9tBN7nvIJs=',NULL,0,'test3','Jarome','Iginla','test3@123.com',0,1,'2019-04-08 20:34:05.785882'),(5,'pbkdf2_sha256$150000$G9L1mCmE7MHl$Khx49AW9FJdYMg+nhSxMGHHrghoQNWsBbw55Qm8qDPg=',NULL,0,'test4','Stephen','Curry','test4@123.com',0,1,'2019-04-08 20:34:05.897731'),(6,'pbkdf2_sha256$150000$D8nUGECkJzyE$+T6i2rqkTVNJp2wkDOyfziZC8HqrPunLe6EoNU1g1bo=',NULL,0,'test5','Thanos','Titan','test5@123.com',0,1,'2019-04-08 20:34:06.013578'),(7,'pbkdf2_sha256$120000$PRdIzGLPpoXe$wJLaEYpzRiZgJU35fAjdlS/sZTI7Wlrux83kBIkLVvM=',NULL,0,'test6','Bill','Gates','bill@microsoft.com',0,1,'2019-04-09 05:00:17.622010'),(8,'pbkdf2_sha256$120000$0cffeJ8PwrFA$RfJLiWZ7//FkuI/nYHAwNE3xMnNw6rZztkA9f15jPwM=',NULL,0,'test7','Corey','Schafer','pythongod@gmail.com',0,1,'2019-04-09 05:00:33.115216');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -538,7 +560,7 @@ CREATE TABLE `bookings_meeting_place` (
   `postal_code` varchar(6) NOT NULL,
   `is_private` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -547,6 +569,7 @@ CREATE TABLE `bookings_meeting_place` (
 
 LOCK TABLES `bookings_meeting_place` WRITE;
 /*!40000 ALTER TABLE `bookings_meeting_place` DISABLE KEYS */;
+INSERT INTO `bookings_meeting_place` VALUES (1,'CPL Central',800,'3 St SE','Calgary','T2G2E7',0),(2,'TFDL',410,'University Ct NW','Calgary','T2N1N4',1),(3,'Starbucks',1120,'16 Ave NW','Calgary','T2M0K8',1),(4,'Higher Ground',1126,'Kensington Rd NW','Calgary','T2N3P3',1),(5,'CPL Memorial Park',1221,'2 St SW','Calgary','T2R1N8',0);
 /*!40000 ALTER TABLE `bookings_meeting_place` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -652,6 +675,29 @@ LOCK TABLES `bookings_scheduled_booking` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `delete`
+--
+
+DROP TABLE IF EXISTS `delete`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `delete` (
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `delete`
+--
+
+LOCK TABLES `delete` WRITE;
+/*!40000 ALTER TABLE `delete` DISABLE KEYS */;
+INSERT INTO `delete` VALUES ('Accounting'),('Big Data'),('Biology 30'),('Chemistry 30'),('Fluid Mechanics'),('Machine Learning'),('Math K-12'),('Physics 30'),('Programming'),('Science K-12'),('Thermodynamics'),('Web Development');
+/*!40000 ALTER TABLE `delete` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `django_admin_log`
 --
 
@@ -672,7 +718,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`),
   CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -681,6 +727,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
+INSERT INTO `django_admin_log` VALUES (1,'2019-04-09 06:01:36.661298','Web Development','Subject object (Web Development)',2,'[{\"changed\": {\"fields\": [\"tutor\"]}}]',13,1),(2,'2019-04-09 06:03:13.911302','Web Development','Subject object (Web Development)',2,'[{\"changed\": {\"fields\": [\"tutor\"]}}]',13,1);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -697,7 +744,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -706,7 +753,7 @@ CREATE TABLE `django_content_type` (
 
 LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (14,'accounts','dependent'),(15,'accounts','known_subject'),(12,'accounts','profile'),(16,'accounts','specialty_subject'),(13,'accounts','subject'),(17,'accounts','tutor_verification'),(18,'admin','logentry'),(20,'auth','group'),(19,'auth','permission'),(21,'auth','user'),(1,'bookings','booking'),(2,'bookings','booking_message_logs'),(3,'bookings','booking_offer'),(10,'bookings','desired_meeting_place'),(4,'bookings','invoice'),(5,'bookings','meeting'),(6,'bookings','meeting_place'),(7,'bookings','message'),(8,'bookings','review'),(9,'bookings','schedule'),(11,'bookings','scheduled_booking'),(22,'contenttypes','contenttype'),(23,'sessions','session');
+INSERT INTO `django_content_type` VALUES (14,'accounts','dependent'),(15,'accounts','known_subject'),(12,'accounts','profile'),(16,'accounts','specialty_subject'),(13,'accounts','subject'),(24,'accounts','tutor_subjects'),(17,'accounts','tutor_verification'),(18,'admin','logentry'),(20,'auth','group'),(19,'auth','permission'),(21,'auth','user'),(1,'bookings','booking'),(2,'bookings','booking_message_logs'),(3,'bookings','booking_offer'),(10,'bookings','desired_meeting_place'),(4,'bookings','invoice'),(5,'bookings','meeting'),(6,'bookings','meeting_place'),(7,'bookings','message'),(8,'bookings','review'),(9,'bookings','schedule'),(11,'bookings','scheduled_booking'),(22,'contenttypes','contenttype'),(23,'sessions','session');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -758,7 +805,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('41zhy1mrd5jhlwc3zov2xhxh305gbedx','OTUyYTc4NzNhOTk3N2UxNjVlNTJjMWJkNjJhOWJhMmU0ZmJhZmYxYTp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0MmM1MzE0MDExZDhhNjUwNjVjODk5MjM0YTg0N2FkZWEzZDhkMzE1In0=','2019-04-22 20:55:53.629317'),('jbie6qlf5s9or9i853fl1jef6qkyw2ac','YTA1ZjYxOWJjZDE5MTY1OWUyMDIyNDA4ZGQyZGNiMzY2YjFmYWQzMTp7Il9hdXRoX3VzZXJfaWQiOiIzIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJjYzMxNGRkMWM4YjQzOTQyNGI4OTQ0M2Q4MGU2ZTJmNjIwYmM2ZGRlIn0=','2019-04-22 20:47:49.574363'),('k6h7xulaczqlj64u6eto69zbkuq2ka85','Y2IyMDhmZWM1ZGRjNDA0ZjFiNDMyYzc5YjQ2YTFkZmYxM2U3ODdlNzp7fQ==','2019-04-22 20:18:01.140028'),('lvfl37oyx5s3ga8ltc5gogtvcoidphvo','OTUyYTc4NzNhOTk3N2UxNjVlNTJjMWJkNjJhOWJhMmU0ZmJhZmYxYTp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0MmM1MzE0MDExZDhhNjUwNjVjODk5MjM0YTg0N2FkZWEzZDhkMzE1In0=','2019-04-22 21:05:31.944645'),('xu2ze35yxnbc802voilbte9ky65rluux','Y2IyMDhmZWM1ZGRjNDA0ZjFiNDMyYzc5YjQ2YTFkZmYxM2U3ODdlNzp7fQ==','2019-04-22 20:18:19.013120');
+INSERT INTO `django_session` VALUES ('41zhy1mrd5jhlwc3zov2xhxh305gbedx','OTUyYTc4NzNhOTk3N2UxNjVlNTJjMWJkNjJhOWJhMmU0ZmJhZmYxYTp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0MmM1MzE0MDExZDhhNjUwNjVjODk5MjM0YTg0N2FkZWEzZDhkMzE1In0=','2019-04-22 20:55:53.629317'),('jbie6qlf5s9or9i853fl1jef6qkyw2ac','YTA1ZjYxOWJjZDE5MTY1OWUyMDIyNDA4ZGQyZGNiMzY2YjFmYWQzMTp7Il9hdXRoX3VzZXJfaWQiOiIzIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJjYzMxNGRkMWM4YjQzOTQyNGI4OTQ0M2Q4MGU2ZTJmNjIwYmM2ZGRlIn0=','2019-04-22 20:47:49.574363'),('k6h7xulaczqlj64u6eto69zbkuq2ka85','Y2IyMDhmZWM1ZGRjNDA0ZjFiNDMyYzc5YjQ2YTFkZmYxM2U3ODdlNzp7fQ==','2019-04-22 20:18:01.140028'),('lvfl37oyx5s3ga8ltc5gogtvcoidphvo','OTUyYTc4NzNhOTk3N2UxNjVlNTJjMWJkNjJhOWJhMmU0ZmJhZmYxYTp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI0MmM1MzE0MDExZDhhNjUwNjVjODk5MjM0YTg0N2FkZWEzZDhkMzE1In0=','2019-04-22 21:05:31.944645'),('qlkncqupycdfx635yhdgswtby5wlirvo','NjQ4ZGU3OWZlY2FiMWQ5MjE3ZWVjMDFjMzdkNTA4NDVjYzk3ZWMzYTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiIyMzE1ZDI0ZjFkZjA1OWU2NGE4N2E0NTU4YzRiNmQyYzNmYjU3NGMzIn0=','2019-04-23 03:37:53.365850'),('xu2ze35yxnbc802voilbte9ky65rluux','Y2IyMDhmZWM1ZGRjNDA0ZjFiNDMyYzc5YjQ2YTFkZmYxM2U3ODdlNzp7fQ==','2019-04-22 20:18:19.013120');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -771,4 +818,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-08 21:30:28
+-- Dump completed on 2019-04-09  9:06:55
