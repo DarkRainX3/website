@@ -15,7 +15,13 @@
     <div class="container">
         <p>
             {% if user.is_authenticated %}
-            <a href ="{% url 'student_book'%}">Book an Appointment with a Tutor</a> <br>
+            <a href ="{% url 'student_book'%}">Book an Appointment with a Tutor</a> <br><br>
+            Choose from our possible subjects: <br>
+               {% for subject in subjects %}
+                <a class="mr-2" href="{% url 'subject-choose' subject.name %}">{{ subject.name }}</a> <br>
+
+                {% endfor %}
+
 {#            <a href ="{% url 'tutor_book'%}">Book an Appointment with a Student</a>#}
             {% endif %}
         </p>

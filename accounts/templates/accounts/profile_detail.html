@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %} <!-- overwrites from parent class -->
+        <h1></h1>
+    <style>
+    table {
+    {#font-family: arial, sans-serif;#}
+    border-collapse: collapse;
+    width: 100%;
+    }
+
+    td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    }
+
+    tr:nth-child(even) {
+    background-color: #dddddd;
+    }
+    </style>
+    </head>
+    <body>
+
+
+    <div class ='container'>
+
+    <table>
+      <tr>
+        <th>{% if profile.tutor_flag == 1 %}
+            <a class="mr-2" href="{% url 'student_book' %}">Book Now!</a> <br>
+            {% endif %}</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Description</th>
+        <th>Education Level</th>
+        <th>City</th>
+        <th>Subjects</th>
+
+      </tr>
+      <tr>
+        <td><img class="rounded-circle account-img" src="{{ profile.image.url }}" height="150" width="150"></td>
+        <td>{{ profile }}</td>
+        <td>{{ profile.user.email }} </td>
+        <td>{{ profile.description }}</td>
+        <td>{{ profile.education_level }}</td>
+        <td>{{ profile.city }}</td>
+        <td>{{ profile.subjects}}</td>
+      </tr>
+
+    </table>
+
+
+    </div>
+{% endblock content %}

@@ -1,27 +1,57 @@
 {% extends "base.html" %} <!--extends base template inheritance -->
 {% block content %}
+
+        <h1></h1>
+    <style>
+    table {
+    {#font-family: arial, sans-serif;#}
+    border-collapse: collapse;
+    width: 100%;
+    }
+
+    td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    }
+
+    tr:nth-child(even) {
+    background-color: #dddddd;
+    }
+    </style>
+    </head>
+    <body>
+
+
+
     <div class ='container'>
-    <a class="mr-2" href={% url 'add_subjects' %}>Add a new subject</a> <br>
-        {% for subject in subjects %} <!--loop over posts in post dictionary -->
-            {% if subject.tutor == user %}
-                <article class="media content-section">
-                  <div class="media-body">
-                    <div class="article-metadata">
-                      <a class="mr-2" href="#">Subject {{ booking.id }}</a> <br>
-        {#              <small class="text-muted">Tutor: {{ booking.tutor_email }}</small>#}
-        {#                <small class="text-muted">Student: {{ booking.student_email }}</small>#}
-                    </div>
-        {#            <h2><a class="article-title" href="{% url 'booking-detail' booking.id%}">{{ booking.tutor_email }}</a></h2>#}
-                    <p class="article-content">Tutor: {{ booking.tutor }} <br>
-                        Student: {{ booking.student }} <br>
-                        Start Time: {{ booking.start_time }} <br>
-                        End Time: {{ booking.end_time }} <br>
-                        Description: {{ booking.description }} <br> <br>
-                    </p>
-                  </div>
-                </article>
+
+        <h3><a class="mr-2" href={% url 'add_subjects' %}>Add a new subject</a></h3><br>
+
+    <table>
+        <tr>
+        <th>Subject</th>
+        <th>Knowledge Level</th>
+        <th>School</th>
+        <th>GPA</th>
+        <th>Specialty</th>
+        </tr>
+        {% for subject in subjects %}
+            {% if subject.subject_creator == user %}
+            <tr>
+                <td><a class="mr-2" href="#"> {{ subject.subject.name }}</a></td>
+                <td>{{ subject.knowledge_level }}</td>
+                <td>{{ subject.school}}</td>
+                <td>{% if subject.gpa != None %}
+                {{ subject.gpa }}
+                {% endif %} </td>
+                <td>{{ subject.specialty }}</td>
+            </tr>
             {% endif %}
         {% endfor %}
 
+    </table>
     </div>
+
+
 {% endblock content %}

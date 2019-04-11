@@ -1,25 +1,62 @@
 {% extends "base.html" %} <!--extends base template inheritance -->
 {% block content %}
+
+
+        <h1></h1>
+    <style>
+    table {
+    {#font-family: arial, sans-serif;#}
+    border-collapse: collapse;
+    width: 100%;
+    }
+
+    td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    }
+
+    tr:nth-child(even) {
+    background-color: #dddddd;
+    }
+    </style>
+    </head>
+    <body>
+
+
+
     <div class ='container'>
-        {% for booking in bookings %} <!--loop over posts in post dictionary -->
+
+    <table>
+        <tr>
+        <th>Booking</th>
+        <th>Tutor</th>
+        <th>Student</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Description</th>
+        <th>Location</th>
+        <th>Total Price</th>
+        </tr>
+        {% for booking in bookings %}
             {% if booking.student == user.profile or booking.tutor == user.profile %}
-                <article class="media content-section">
-                  <div class="media-body">
-                    <div class="article-metadata">
-                      <a class="mr-2" href="#">Booking {{ booking.id }}</a> <br>
-        {#              <small class="text-muted">Tutor: {{ booking.tutor_email }}</small>#}
-        {#                <small class="text-muted">Student: {{ booking.student_email }}</small>#}
-                    </div>
-        {#            <h2><a class="article-title" href="{% url 'booking-detail' booking.id%}">{{ booking.tutor_email }}</a></h2>#}
-                    <p class="article-content">Tutor: {{ booking.tutor }} <br>
-                        Student: {{ booking.student }} <br>
-                        Start Time: {{ booking.start_time }} <br>
-                        End Time: {{ booking.end_time }} <br>
-                        Description: {{ booking.description }} <br> <br>
-                    </p>
-                  </div>
-                </article>
+            <tr>
+                <td><a class="mr-2" href="{% url 'book-detail' booking.id %}"> ID {{ booking.id }}</a></td>
+                <td>{{ booking.tutor }}</td>
+                <td>{{ booking.student }}</td>
+                <td>{{ booking.start_time }}</td>
+                <td>{{ booking.end_time }}</td>
+                <td>{{ booking.description }}</td>
+                <td>{{ booking.location }}</td>
+                <td>{{ booking.price }}</td>
+                <td><a href="{% url 'book-update' booking.pk %}">Update</a></td>
+                <td><a href="{% url 'book-delete' booking.pk %}">Delete</a></td>
+
+            </tr>
             {% endif %}
         {% endfor %}
+
+    </table>
     </div>
+
 {% endblock content %}

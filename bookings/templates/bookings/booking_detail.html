@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{% url 'profile-detail' booking.tutor.id %}">Tutor: {{ booking.tutor }}</a> <br>
+        <a class="mr-2" href="{% url 'profile-detail' booking.student.id %}">Student: {{ booking.student }}</a>
+        {% if booking.student == user.profile or booking.tutor == user.profile %}
+          <div>
+{#            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'book-update' booking.id %}">Update</a>#}
+{#            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'booking-delete' booking.id %}">Delete</a>#}
+          </div>
+        {% endif %}
+      </div>
+        <p class="article-content">
+            Start Time: {{ booking.start_time }} <br>
+            End Time: {{ booking.end_time }} <br>
+            Description: {{ booking.description }} <br>
+            Preferred Platform: {{ booking.pref_platform }}<br>
+            Meeting Place: {{ booking.location }}
+            Price: {{ booking.price }}
+        </p>
+    </div>
+  </article>
+{% endblock content %}
+

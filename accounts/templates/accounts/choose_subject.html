@@ -1,0 +1,56 @@
+{% extends "base.html" %} <!--extends base template inheritance -->
+{% block content %}
+    <h1></h1>
+    <style>
+    table {
+    {#font-family: arial, sans-serif;#}
+    border-collapse: collapse;
+    width: 100%;
+    }
+
+    td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    }
+
+    tr:nth-child(even) {
+    background-color: #dddddd;
+    }
+    </style>
+    </head>
+    <body>
+
+
+
+    <div class ='container'>
+
+    <table>
+      <tr>
+        <th>Tutor Name</th>
+        <th>Education</th>
+        <th>Description</th>
+          <th>Knowledge Level</th>
+          <th>GPA</th>
+          <th>Specialty</th>
+      </tr>
+       {% for subject in subjects %}
+      <tr>
+        <td><a class="mr-2" href="{% url 'profile-detail' subject.subject_creator.id %}">
+                      {{ subject.subject_creator.profile }} </a></td>
+        <td>{{ subject.subject_creator.profile.education_level }}</td>
+        <td>{{ subject.subject_creator.profile.description }}</td>
+        <td>{{ subject.subject_creator.profile.subjects.knowledge_level }}</td>
+        <td>{% if subject.gpa != None %}
+          {{ subject.gpa }}
+        {% endif %} </td>
+        <td>{{ subject.specialty }}</td>
+      </tr>
+        {% endfor %}
+
+    </table>
+
+
+    </div>
+{% endblock content %}
+

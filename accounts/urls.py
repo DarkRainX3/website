@@ -18,5 +18,7 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     url(r'^subject_list/$', views.SubjectListView.as_view(), name='subject_list'),
     url(r'^add_subjects/$', views.SubjectCreateView.as_view(), name='add_subjects'),
+    path('profile/<int:pk>/', views.ProfileDetailView.as_view(), name='profile-detail'),
+    path('choose_subject/<name>/', views.ChooseSubject.as_view(), name='subject-choose'),
 
 ]

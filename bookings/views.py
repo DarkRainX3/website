@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Booking # . means from models file in current package
+from .models import Booking, Known_subject # . means from models file in current package
 from django.views.generic import (
-    ListView, DetailView, CreateView, UpdateView)
+    ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.admin import widgets
 from accounts.models import Profile
 from django.urls import reverse
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 
 class BookListView(ListView):
     model = Booking
@@ -16,7 +17,22 @@ class BookListView(ListView):
 
 class BookCreateView_Student(LoginRequiredMixin, CreateView):
     model = Booking
-    fields = ['tutor', 'start_time', 'end_time', 'description', 'booking_type', 'pref_platform']
+    fields = ['tutor', 'start_time', 'end_time', 'description', 'pref_platform', 'location']
+
+
+    # def __init__(self, *args, **kwargs):
+    #     tutor = kwargs.pop('tutor', None)
+    #     if tutor is None:
+    #         tutor = self.fields['tutor'].current
+    #     super(BookCreateView_Student, self).__init__(*args, **kwargs)
+    #     self.fields['price'] = tutor.rate
+    #     self.fields['price'].disabled = True
+
+    # def get_initial(self, *args, **kwargs):
+    #     initial = super(BookCreateView_Student, self).get_initial(**kwargs)
+    #     initial['created_by'] = self.request.user
+    #     return initial
+
 
     def form_valid(self, form):
         instance = form.save(commit=False)
@@ -24,40 +40,74 @@ class BookCreateView_Student(LoginRequiredMixin, CreateView):
         instance.save()
         return super().form_valid(instance)
 
-    def get_form(self, form_class=None):
-        form = super(BookCreateView_Student, self).get_form(form_class=None)
-        form.fields['start_time'].help_text='YYYY-MM-DD hh:mm'
-        # form.fields['start_time'].widget = widgets.AdminSplitDateTime()
-        # form.fields['end_time'].widget = widgets.AdminSplitDateTime()
-        return form
+    # def get_form(self, form_class=None):
+    #     form = super(BookCreateView_Student, self).get_form(form_class=None)
+    #     form.initial['created_by'] = self.request.user
+    #     return form
+
+    # def get_form_kwargs(self, *args, **kwargs):
+    #     form = super(BookCreateView_Student, self).get_form_kwargs(*args, **kwargs)
+    #     form['created_by'] = self.request.user
+    #     # tutor =
+    #     # form.fields['subject'].queryset = Known_subject.objects.filter(subject_creator=form.get('tutor'))
+    #     return form
 
     def get_success_url(self):
         messages.success(self.request, 'Booking created successfully')
         return reverse('home_redirect')
 
-
-class BookCreateView_Tutor(LoginRequiredMixin, CreateView):
+class BookUpdateView(LoginRequiredMixin, UpdateView):
     model = Booking
-    fields = ['student', 'start_time', 'end_time', 'description', 'booking_type', 'pref_platform']
-
-    def form_valid(self, form):
-        # form.instance.created_by = self.request.user
-        instance = form.save(commit=False)
-        instance.created_by = self.request.user
-        instance.save()
-        return super().form_valid(form)
-
-
-    def get_form(self, form_class=None):
-        form = super(BookCreateView_Tutor, self).get_form(form_class=None)
-        # form.fields['start_time'].widget = widgets.AdminSplitDateTime()
-        # form.fields['end_time'].widget = widgets.AdminSplitDateTime()
-        #form.fields['student'].queryset = Profile.objects.filter(self.request.user)
-        return form
+    template_name = 'bookings/booking_form.html'
+    fields = ['tutor', 'start_time', 'end_time', 'description', 'pref_platform', 'location']
 
     def get_success_url(self):
-        messages.success(self.request, 'Profile Updated Successfully')
-        return reverse('home_redirect')
+        messages.success(self.request, 'Booking updated successfully')
+        return reverse('book')
+
+
+
+    # def get_success_url(self):
+    #     messages.success(self.request, 'Booking updated successfully')
+    #     return reverse('book')
+
+class BookDeleteView(DeleteView):
+    model = Booking
+    template_name = 'bookings/booking_delete.html'
+    context_object_name = 'booking'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Booking deleted successfully')
+        return reverse('book')
+
+# class BookCreateView_Tutor(LoginRequiredMixin, CreateView):
+#     model = Booking
+#     fields = ['student', 'start_time', 'end_time', 'description', 'booking_type', 'pref_platform']
+#
+#
+#
+#     def form_valid(self, form):
+#         # form.instance.created_by = self.request.user
+#         instance = form.save(commit=False)
+#         instance.created_by = self.request.user
+#         instance.save()
+#         return super().form_valid(form)
+#
+#
+#     def get_form(self, form_class=None):
+#         form = super(BookCreateView_Tutor, self).get_form(form_class=None)
+#         # form.fields['start_time'].widget = widgets.AdminSplitDateTime()
+#         # form.fields['end_time'].widget = widgets.AdminSplitDateTime()
+#         #form.fields['student'].queryset = Profile.objects.filter(self.request.user)
+#         return form
+#
+#     def get_success_url(self):
+#         messages.success(self.request, 'Profile Updated Successfully')
+#         return reverse('home_redirect')
+
+class BookDetailView(LoginRequiredMixin, DetailView):
+    model = Booking
+
 
 
 # class TutorSearchView(ListView):

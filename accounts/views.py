@@ -13,24 +13,30 @@ from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView)
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Known_subject
+from .models import Subject
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
 
 def home(request):
-    #communicate with django database queries here
+    subjects = Subject.objects.all()
 
-    numbers = [1,2,3,4,5]
-    name = 'student'
+    context = {'subjects':subjects
 
-    args = {'myName': name, 'numbers':numbers}
-    return render(request,'home.html', args)
+    }
+
+
+
+    return render(request,'home.html', context)
 
 def new(request):
     return render(request,'accounts/new.html')
 
+
 def about(request):
     return render(request,'about.html')
+
 
 def register(request):
     if request.method == 'POST':
@@ -44,6 +50,7 @@ def register(request):
         form = UserRegisterForm()
 
     return render(request, 'accounts/register.html', {'form': form})
+
 
 @login_required
 def profile(request):
@@ -69,15 +76,25 @@ def profile(request):
 
     return render(request, 'accounts/profile.html', context)
 
+
 def search(request):
     query = request.GET.get('q')
     qs = Profile.objects.all()
+    subs = Known_subject.objects.all()
     if query is not None:
         qs = qs.filter(user__first_name__icontains=query).filter(tutor_flag__exact=True)
+        subs = subs.filter(subject_creator__first_name__icontains=query)
     context={
-        'tutors': qs
+        'tutors': qs,
+        'subs': subs
     }
     return render(request, 'accounts/search.html', context)
+
+
+# def subject_search(request):
+#     if request.method == 'POST':
+
+
 
 class SubjectCreateView(LoginRequiredMixin, CreateView):
     model = Known_subject
@@ -86,17 +103,9 @@ class SubjectCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         instance = form.save(commit=False)
-        instance.tutor = self.request.user.profile
+        instance.subject_creator = self.request.user
         instance.save()
-        return super().form_valid(instance)
-
-    #
-    # def form_valid(self, form):
-    #     # form.instance.created_by = self.request.user
-    #     instance = form.save(commit=False)
-    #     instance.created_by = self.request.user
-    #     instance.save()
-    #     return super().form_valid(form)
+        return super().form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, 'Subjects created successfully')
@@ -107,6 +116,24 @@ class SubjectListView(LoginRequiredMixin, ListView):
     template_name = 'accounts/subject_list.html'
     context_object_name = 'subjects'
 
+class ProfileDetailView(LoginRequiredMixin, DetailView):
+    model = Profile
+
+    def get_queryset(self):
+        return Profile.objects.filter(id=self.kwargs['pk'])
+
+    # def get_context_data(self, **kwargs):
+    #     context = super(ProfileDetailView, self).get_context_data(**kwargs)
+    #     context['k_subjects'] = Known_subject.objects.filter(subject_creator=Profile.user)
+    #     return context
+
+class ChooseSubject(LoginRequiredMixin, ListView):
+    model = Known_subject
+    template_name = 'accounts/choose_subject.html'
+    context_object_name = 'subjects'
+
+    def get_queryset(self):
+        return Known_subject.objects.filter(subject=self.kwargs['name'])
 
 
 

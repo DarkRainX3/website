@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
+from bookings.models import Booking
 """https://simpleisbetterthancomplex.com/tutorial/2018/11/28/advanced-form-rendering-with-django-crispy-forms.html"""
 """https://getbootstrap.com/docs/4.1/components/forms/#form-row"""
 """https://simpleisbetterthancomplex.com/tutorial/2018/08/13/how-to-use-bootstrap-4-forms-with-django.html"""
@@ -37,7 +38,8 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['city', 'description', 'education_level', 'student_flag', 'tutor_flag', 'image']
+        fields = ['city', 'description', 'education_level', 'rate', 'student_flag', 'tutor_flag', 'image']
+
 
 
 

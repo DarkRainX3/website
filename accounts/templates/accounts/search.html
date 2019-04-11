@@ -5,15 +5,18 @@
             <article class="media content-section">
               <div class="media-body">
                 <div class="article-metadata">
-                  <a class="mr-2" href="#">Tutor: {{ tutor.user.first_name }}</a> <br>
-    {#              <small class="text-muted">Tutor: {{ booking.tutor_email }}</small>#}
-    {#                <small class="text-muted">Student: {{ booking.student_email }}</small>#}
+                  <a class="mr-2" href="{% url 'profile-detail' tutor.id %}">Tutor: {{ tutor }}</a> <br>
                 </div>
-    {#            <h2><a class="article-title" href="{% url 'booking-detail' booking.id%}">{{ booking.tutor_email }}</a></h2>#}
+
                 <p class="article-content">
                     Education: {{ tutor.education_level }} <br>
                     Description: {{ tutor.description }} <br>
-                    Subjects: {{ tutor.subject_set }} <br>
+                    {% for sub in subs %}
+                        {% if sub.subject_creator == user %}
+                            Subject: {{ sub.subject}} <br>
+                            Knowledge Level: {{ sub.knowledge_level }} <br><br>
+                        {% endif %}
+                    {% endfor %}
                     <br>
                 </p>
               </div>

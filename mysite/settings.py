@@ -35,6 +35,9 @@ INSTALLED_APPS = [
     'crispy_forms',
     'bookings',
     'accounts',
+    #'djmoney',
+    # 'dal',
+    # 'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -120,7 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Canada/Mountain'
 
 USE_I18N = True
 
