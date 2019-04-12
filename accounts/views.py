@@ -82,7 +82,10 @@ def registerS(request):
     args = {'profile_creation_form':profile_creation_form, 'user_creation_form':user_creation_form}
     return render(request, 'accounts/register.html',args)
 
-def profile(request, pid):
-    today = datetime.datetime.now().date()
-    args = {'pid':pid, "today":today}
-    return render(request, 'accounts/profile.html',args)
+# def profile(request, pid):
+#     today = datetime.datetime.now().date()
+#     args = {'pid':pid, "today":today}
+#     return render(request, 'accounts/profile.html',args)
+
+def profile(request):
+    return render(request, 'accounts/profile.html')
