@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Booking, Known_subject, Invoice, Review # . means from models file in current package
+from .models import Booking, Known_subject, Invoice, Review, Meeting_Place
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -74,7 +74,7 @@ class BookUpdateView(LoginRequiredMixin, UpdateView):
 
 class BookDeleteView(DeleteView):
     model = Booking
-    template_name = 'bookings/booking_delete.html'
+    template_name = 'delete.html'
     context_object_name = 'booking'
 
     def get_success_url(self):
@@ -97,6 +97,20 @@ class InvoiceListView(LoginRequiredMixin, ListView):
     template_name = 'bookings/invoices.html'
     context_object_name = 'invoices'
 
+class MeetingCreateView(LoginRequiredMixin, CreateView):
+    model = Meeting_Place
+    template_name = 'bookings/new_place.html'
+    fields = ['name', 'number', 'street', 'city', 'postal_code', 'is_private']
+
+
+    def get_success_url(self):
+        messages.success(self.request, 'Booking updated successfully')
+        return reverse('places')
+
+class MeetingListView(LoginRequiredMixin, ListView):
+    model = Meeting_Place
+    template_name = 'bookings/meeting_places'
+    context_object_name = 'meeting'
 
 
 # class TutorSearchView(ListView):

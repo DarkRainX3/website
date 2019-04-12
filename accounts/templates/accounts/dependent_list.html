@@ -1,0 +1,53 @@
+{% extends "base.html" %} <!--extends base template inheritance -->
+{% block content %}
+
+        <h1></h1>
+    <style>
+    table {
+    {#font-family: arial, sans-serif;#}
+    border-collapse: collapse;
+    width: 50%;
+    }
+
+    td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    }
+
+    tr:nth-child(even) {
+    background-color: #dddddd;
+    }
+    </style>
+    </head>
+    <body>
+
+
+    <div class ='container'>
+
+        <h3><a class="mr-2" href={% url 'add_dep' %}>Add a new dependent</a></h3><br>
+
+    <table>
+        <tr>
+        <th>Name</th>
+        <th></th>
+        <th></th>
+
+        </tr>
+        {% for dep in dependents %}
+            {% if dep.parent == user.profile %}
+
+            <tr>
+
+                <td>{{ dep }}</td>
+                <td><a href={% url 'update-dep' dep.pk %}>Edit</a></td>
+                <td><a href={% url 'del-dep' dep.pk %}>Delete</a></td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+
+    </table>
+    </div>
+
+
+{% endblock content %}

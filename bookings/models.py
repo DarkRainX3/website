@@ -19,6 +19,10 @@ class Meeting_Place(models.Model):
     postal_code = models.CharField(max_length=6)
     is_private = models.BooleanField()
 
+
+    # def get_absolute_url(self):
+    #     return reverse('places', kwargs={'pk': self.pk})
+
     def __str__(self):
         return self.name
 

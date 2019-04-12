@@ -69,10 +69,17 @@ class Tutor_Verification(models.Model):
 
 
 class Dependent(models.Model):
-    parent = models.OneToOneField(Profile, primary_key=True, on_delete=models.CASCADE)
+    parent = models.ForeignKey(Profile, primary_key=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50, null=True)
     last_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return "%s %s" % (self.first_name, self.last_name)
+
+    def get_absolute_url(self):
+        return reverse('deps', kwargs={'pk': self.pk})
+
 #
 # class Tutor_Teach_Student(models.Model): #not sure if this table is correct
 #     tutor = models.OneToOneField(Profile, to_field='email', on_delete=models.CASCADE, related_name='tutor')

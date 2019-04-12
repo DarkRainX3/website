@@ -10,10 +10,10 @@ from django.db import IntegrityError
 import datetime
 from .models import Profile
 from django.views.generic import (
-    ListView, DetailView, CreateView, UpdateView)
+    ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Known_subject
-from .models import Subject
+from .models import Known_subject, Subject, Dependent
+
 from django.shortcuts import get_object_or_404
 # Create your views here.
 
@@ -124,13 +124,55 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     #     context['k_subjects'] = Known_subject.objects.filter(subject_creator=Profile.user)
     #     return context
 
+
 class ChooseSubject(LoginRequiredMixin, ListView):
     model = Known_subject
     template_name = 'accounts/choose_subject.html'
     context_object_name = 'subjects'
 
-    def get_queryset(self):
-        return Known_subject.objects.filter(subject=self.kwargs['name'])
+
+class DependentCreateView(LoginRequiredMixin, CreateView):
+    model = Dependent
+    template_name = 'accounts/add_dependent.html'
+    fields = ['first_name', 'middle_name', 'last_name']
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.parent = self.request.user.profile
+        instance.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request, 'Booking updated successfully')
+        return reverse('deps')
+
+
+class DependentListView(LoginRequiredMixin, ListView):
+    model = Dependent
+    template_name = 'accounts/dependent_list.html'
+    context_object_name = 'dependents'
+
+
+class DependentUpdateView(LoginRequiredMixin, UpdateView):
+    model = Dependent
+    template_name = 'accounts/add_dependent.html'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Booking updated successfully')
+        return reverse('deps')
+
+
+
+
+class DependentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Dependent
+    template_name = 'delete.html'
+    context_object_name = 'dependent'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Dependent deleted successfully')
+        return reverse('deps')
+
 
 
 
