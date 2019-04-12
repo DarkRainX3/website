@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from accounts.forms import RegProfile
+from accounts.forms import RegProfile, DateForm
 import datetime
 # Create your views here.
 def home(request):
@@ -35,8 +35,9 @@ def register(request):
     else:
         profile_creation_form = RegProfile()
         user_creation_form= UserCreationForm()
+        date_form=DateForm()
 
-    args = {'profile_creation_form':profile_creation_form, 'user_creation_form':user_creation_form}
+    args = {'profile_creation_form':profile_creation_form, 'user_creation_form':user_creation_form, 'date':date_form}
     return render(request, 'accounts/select.html',args)
     return render(request, 'accounts/register.html',args)
 
@@ -78,8 +79,9 @@ def registerS(request):
     else:
         profile_creation_form = RegProfile()
         user_creation_form= UserCreationForm()
+        date_form=DateForm()
 
-    args = {'profile_creation_form':profile_creation_form, 'user_creation_form':user_creation_form}
+    args = {'profile_creation_form':profile_creation_form, 'user_creation_form':user_creation_form, 'date':date_form}
     return render(request, 'accounts/register.html',args)
 
 # def profile(request, pid):
