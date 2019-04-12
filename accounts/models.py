@@ -24,7 +24,7 @@ kl_choices = (('Basic', 'Basic'),('Intermediate', 'Intermediate'),
 class Known_subject(models.Model): #removed subject as primary key?
     id = models.AutoField(primary_key=True)
     subject = models.ForeignKey(Subject, on_delete="CASCADE")
-    subject_creator = models.ForeignKey(User, on_delete='CASCADE', null=True)
+    subject_creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     knowledge_level = models.CharField(max_length=50, choices=kl_choices)
     school = models.CharField(max_length=100)
     graduation_year = models.IntegerField(validators=[MinValueValidator(1900), MaxValueValidator(2050)],
@@ -45,7 +45,7 @@ class Profile(models.Model):
     student_flag = models.BooleanField(default=False)
     tutor_flag = models.BooleanField(default=False)
     rate = models.FloatField(null=True)
-    subjects = models.ForeignKey(Known_subject, on_delete='CASCADE', null=True)
+    subjects = models.ForeignKey(Known_subject, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return "%s %s" % (self.user.first_name, self.user.last_name)
@@ -64,19 +64,19 @@ class Profile(models.Model):
 
 
 class Tutor_Verification(models.Model):
-    tutor = models.OneToOneField(Profile, primary_key=True, on_delete="CASCADE")
+    tutor = models.OneToOneField(Profile, primary_key=True, on_delete=models.CASCADE)
     verification = models.BooleanField(default=False)
 
 
 class Dependent(models.Model):
-    parent = models.OneToOneField(Profile, primary_key=True, on_delete="CASCADE")
+    parent = models.OneToOneField(Profile, primary_key=True, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50, null=True)
     last_name = models.CharField(max_length=50)
 #
 # class Tutor_Teach_Student(models.Model): #not sure if this table is correct
-#     tutor = models.OneToOneField(Profile, to_field='email', on_delete="CASCADE", related_name='tutor')
-#     student = models.OneToOneField(Profile, to_field='email', on_delete="CASCADE", related_name='student')
+#     tutor = models.OneToOneField(Profile, to_field='email', on_delete=models.CASCADE, related_name='tutor')
+#     student = models.OneToOneField(Profile, to_field='email', on_delete=models.CASCADE, related_name='student')
 
 
 

@@ -1,0 +1,50 @@
+{% extends "base.html" %} <!--extends base template inheritance -->
+{% block content %}
+
+
+        <h1></h1>
+    <style>
+    table {
+    {#font-family: arial, sans-serif;#}
+    border-collapse: collapse;
+    width: 100%;
+    }
+
+    td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    }
+
+    tr:nth-child(even) {
+    background-color: #dddddd;
+    }
+    </style>
+    </head>
+    <body>
+
+
+
+    <div class ='container'>
+
+    <table>
+        <tr>
+        <th>Booking</th>
+        <th>Invoice</th>
+        <th>Price</th>
+        </tr>
+        {% for invoice in invoices %}
+            {% if invoice.booking_id.tutor == user.profile or invoice.booking_id.student == user.profile %}
+            <tr>
+                <td><a class="mr-2" href="{% url 'book-detail' invoice.booking_id %}"> ID {{ invoice.booking_id }}</a></td>
+                <td><a class="mr-2" href="{% url 'invoice-detail' invoice.pk %}"> ID {{ invoice.id }}</a></td>
+                <td>{{ invoice.total }}</td>
+
+            </tr>
+            {% endif %}
+        {% endfor %}
+
+    </table>
+    </div>
+
+{% endblock content %}

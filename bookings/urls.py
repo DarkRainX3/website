@@ -2,7 +2,8 @@
 from django.conf.urls import url
 from django.urls import path
 
-from .views import BookListView, BookCreateView_Student, BookDetailView, BookUpdateView, BookDeleteView
+from .views import BookListView, BookCreateView_Student, BookDetailView, \
+    BookUpdateView, BookDeleteView, InvoiceDetailView, InvoiceListView
 
 urlpatterns = [
     path('bookings/', BookListView.as_view(), name='book'),
@@ -11,6 +12,7 @@ urlpatterns = [
     path('bookings/<int:pk>/', BookDetailView.as_view(), name='book-detail'),
     path('bookings/<int:pk>/update', BookUpdateView.as_view(), name='book-update'),
     path('bookings/<int:pk>/delete', BookDeleteView.as_view(), name='book-delete'),
-
+    path('invoices/', InvoiceListView.as_view(), name='invoice'),
+    path('invoices/<int:pk>/', InvoiceDetailView.as_view(), name='invoice-detail'),
 ]
 

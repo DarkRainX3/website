@@ -25,9 +25,6 @@ def home(request):
     context = {'subjects':subjects
 
     }
-
-
-
     return render(request,'home.html', context)
 
 def new(request):

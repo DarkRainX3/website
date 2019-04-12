@@ -12,7 +12,6 @@ from django.utils import timezone
 platform_choices = (('Online', 'Online'), ('In-Person', 'In-Person'))
 
 class Meeting_Place(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100, unique=True)
     number = models.IntegerField()
     street = models.CharField(max_length=100)
@@ -25,20 +24,19 @@ class Meeting_Place(models.Model):
 
 
 class Booking(models.Model):
-    id = models.AutoField(primary_key=True)
-    student = models.ForeignKey(Profile, on_delete='CASCADE', related_name='student_book', limit_choices_to={'student_flag':True}, to_field='user', null=True) #double check
-    tutor = models.ForeignKey(Profile, on_delete='CASCADE', related_name='tutor_book', limit_choices_to={'tutor_flag':True}, to_field='user', null=True) #double check
-    #subject = models.ForeignKey(Known_subject, on_delete='CASCADE', null=True)
+    student = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='student_book', limit_choices_to={'student_flag':True}, to_field='user', null=True) #double check
+    tutor = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='tutor_book', limit_choices_to={'tutor_flag':True}, to_field='user', null=True) #double check
     start_time = models.DateTimeField(help_text='YYYY-MM-DD hh:mm')
     end_time = models.DateTimeField(help_text='YYYY-MM-DD hh:mm')
     price = models.FloatField()
     description = models.CharField(max_length=250)
     pref_platform = models.CharField(max_length=50, choices=platform_choices)
-    location = models.ForeignKey(Meeting_Place, on_delete='CASCADE', null=True, blank=True, to_field='name')
-
+    location = models.ForeignKey(Meeting_Place, on_delete=models.CASCADE, null=True, blank=True, to_field='name')
+    transaction_time = models.DateTimeField(default=0)
+    hours = models.FloatField(default=0)
 
     def __str__(self):
-        return "%s %s" % ('Booking', self.id)
+        return self.id
 
     def get_absolute_url(self):
         return reverse('book', kwargs={'pk': self.pk})
@@ -46,6 +44,10 @@ class Booking(models.Model):
     @property
     def price(self):
         return (self.end_time - self.start_time).total_seconds() / (60*60) * self.tutor.rate
+
+    @property
+    def hours(self):
+        return (self.end_time - self.start_time).total_seconds() / (60*60)
 
     def clean(self, *args, **kwargs):
         super(Booking, self).clean(*args, **kwargs)
@@ -68,7 +70,7 @@ class Booking(models.Model):
             raise ValidationError(errors)
 
 
-    #meeting_place_id = models.ForeignKey(Meeting_Place, on_delete="CASCADE")
+    #meeting_place_id = models.ForeignKey(Meeting_Place, on_delete=models.CASCADE)
     #commute_fee = models.FloatField()
 
     # def fullname_student(self):
@@ -78,18 +80,25 @@ class Booking(models.Model):
     #     return "%s %s" % (self.tutor.first_name, self.tutor.last_name)
 
 class Invoice(models.Model):
-    id = models.AutoField(primary_key=True)
-    booking_id = models.OneToOneField(Booking, to_field='id', on_delete="CASCADE")
-    amount = models.OneToOneField(Booking, to_field='price', on_delete='CASCADE')
+    booking = models.OneToOneField(Booking, to_field='id', on_delete=models.CASCADE, null=True)
+    tax = models.FloatField(default=0)
+    total = models.FloatField(default=0)
 
+    # @property
+    # def tax(self):
+    #     return self.booking.price * 0.05
+    #
+    # @property
+    # def total(self):
+    #     return self.booking.price + self.tax
+
+    def get_absolute_url(self):
+        return reverse('invoice-detail', kwargs={'pk': self.pk})
 
 class Review(models.Model):
     id = models.AutoField(primary_key=True)
-    invoice_id = models.OneToOneField(Invoice, to_field='id', on_delete="CASCADE")
-    reviewer = models.OneToOneField(Profile, on_delete="CASCADE", related_name='reviewer')
-    reviewee = models.OneToOneField(Profile, on_delete="CASCADE", related_name='reviewee')
+    invoice_id = models.OneToOneField(Invoice, to_field='id', on_delete=models.CASCADE)
     overall_rating = models.IntegerField(validators=[MaxValueValidator(0), MinValueValidator(5)])
-    knowledge = models.CharField(max_length=100)
     explanation = models.CharField(max_length=250)
 
 class Booking_Message_Logs(models.Model):
@@ -109,7 +118,7 @@ class Scheduled_Booking(Booking):
 
 class Refund_Request:
     id = models.AutoField(primary_key=True)
-    invoice_id = models.OneToOneField(Invoice, to_field='id', on_delete="CASCADE")
+    invoice_id = models.OneToOneField(Invoice, to_field='id', on_delete=models.CASCADE)
     reason = models.CharField(max_length=250)
     amount = models.FloatField()
 

@@ -51,6 +51,7 @@
                 <td>{{ booking.price }}</td>
                 <td><a href="{% url 'book-update' booking.pk %}">Update</a></td>
                 <td><a href="{% url 'book-delete' booking.pk %}">Delete</a></td>
+                <td><a href="{% url 'invoice-detail' booking.invoice.pk %}">Invoice</a></td>
 
             </tr>
             {% endif %}
