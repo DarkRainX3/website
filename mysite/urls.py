@@ -20,6 +20,7 @@ from django.contrib.auth.views import LoginView
 from mysite import views
 from django.conf import settings
 from django.conf.urls.static import static
+import debug_toolbar
 
 urlpatterns = [
     url(r'^$', views.home_redirect, name = 'home_redirect'),
@@ -28,8 +29,10 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(template_name='accounts/login.html'),name='login'),
     path('', include('accounts.urls')),
     path('', include('bookings.urls')),
+    # path('', include('django_messages.urls')),
     # url(r'^home/$', LoginView.as_view(template_name='accounts/home.html'),name='home')
     # url(r'^new/$', views.new)
+    path('r^__debug__', include(debug_toolbar.urls)),
 ]
 
 if settings.DEBUG:

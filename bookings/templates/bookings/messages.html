@@ -24,24 +24,24 @@
     <body>
 
     <div class ='container'>
+    <a href="{% url 'new-message' %}">Send a new message</a> <br>
+    <a href="{% url 'messages-outbox' %}">Outbox</a> <br>
 
     <table>
         <tr>
-        <th>Booking Date</th>
-        <th>Reviewer</th>
-        <th>Overall Rating</th>
-        <th>Explanation</th>
-        </tr>
-        {% for review in reviews %}
-            {% if review.reviewee == user.profile %}
-            <tr>
-                <td>{{ review.booking.end_time }}</td>
-                <td>{{ review.reviewer }}</td>
-                <td>{{ review.overall_rating}}</td>
-                <td>{{ review.explanation }}</td>
+        <th>Sender</th>
+        <th>Time</th>
+        <th>Content</th>
 
-            </tr>
-            {% endif %}
+        </tr>
+        {% for mess in message %}
+        <tr>
+            <td>{{ mess.sender }}</td>
+            <td>{{ mess.sent_at }}</td>
+            <td>{{ mess.content}}</td>
+
+        </tr>
+
         {% endfor %}
 
     </table>

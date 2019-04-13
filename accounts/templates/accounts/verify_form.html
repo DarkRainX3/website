@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+<link rel="stylesheet" type="text/css" href="/media/admin/css/forms.css"/>
+<link rel="stylesheet" type="text/css" href="/media/admin/css/base.css"/>
+<link rel="stylesheet" type="text/css" href="/media/admin/css/global.css"/>
+<link rel="stylesheet" type="text/css" href="/media/admin/css/widgets.css"/>
+
+{% block content %} <!-- overwrites from parent class -->
+    <div class="content section">
+        <form method = "POST">
+            {% csrf_token %}  <!-- protect form against certain attacks. MUST HAVE -->
+            <fieldset class = "form-group">
+                <legend class="border-bottom mb-4">Verification Form</legend>
+                {{ form|crispy }} <!--render form in paragraph tags -->
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
+<script type="text/javascript" src="/my_admin/jsi18n/"></script>
+<script type="text/javascript" src="/media/admin/js/core.js"></script>

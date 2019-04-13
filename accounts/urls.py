@@ -21,6 +21,9 @@ urlpatterns = [
     path('dependent/', views.DependentListView.as_view(), name='deps'),
     path('dependent/<int:pk>/', views.DependentUpdateView.as_view(), name='update-dep'),
     path('dependent/<int:pk>/delete', views.DependentDeleteView.as_view(), name='del-dep'),
+    path('verification/<int:pk>/', views.VerificationDetailView.as_view(), name='verify'),
+    path('new_verification/', views.VerificationCreateView.as_view(), name='verify-form'),
+
 
 
 ]

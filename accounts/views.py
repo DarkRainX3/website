@@ -12,7 +12,8 @@ from .models import Profile
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Known_subject, Subject, Dependent
+from .models import *
+from bookings.models import Review
 
 from django.shortcuts import get_object_or_404
 # Create your views here.
@@ -78,9 +79,11 @@ def search(request):
     query = request.GET.get('q')
     qs = Profile.objects.all()
     subs = Known_subject.objects.all()
+    reviews = Review.objects.all()
     if query is not None:
         qs = qs.filter(user__first_name__icontains=query).filter(tutor_flag__exact=True)
         subs = subs.filter(subject_creator__first_name__icontains=query)
+
     context={
         'tutors': qs,
         'subs': subs
@@ -162,18 +165,30 @@ class DependentUpdateView(LoginRequiredMixin, UpdateView):
         return reverse('deps')
 
 
-
-
 class DependentDeleteView(LoginRequiredMixin, DeleteView):
     model = Dependent
     template_name = 'delete.html'
-    context_object_name = 'dependent'
 
     def get_success_url(self):
         messages.success(self.request, 'Dependent deleted successfully')
         return reverse('deps')
 
 
+class VerificationCreateView(LoginRequiredMixin, CreateView):
+    model = Tutor_Verification
+    fields = ['description', 'image']
+    template_name = 'accounts/verify_form.html'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Verification created')
+        return reverse('verify')
+
+
+class VerificationDetailView(LoginRequiredMixin, DetailView):
+    model = Tutor_Verification
+
+    def get_queryset(self):
+        return Tutor_Verification.objects.filter(id=self.kwargs['pk'])
 
 
 # class Subject(models.Model):

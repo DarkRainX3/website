@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Booking, Known_subject, Invoice, Review, Meeting_Place
+from .models import *
 from django.views.generic import (
     ListView, DetailView, CreateView, UpdateView, DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -34,7 +34,6 @@ class BookCreateView_Student(LoginRequiredMixin, CreateView):
     #     initial['created_by'] = self.request.user
     #     return initial
 
-
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.student = self.request.user.profile
@@ -44,7 +43,7 @@ class BookCreateView_Student(LoginRequiredMixin, CreateView):
         price = instance.price + tax
         invoice = Invoice.objects.create(booking_id=instance.id, total=price, tax=tax)
 
-        return super().form_valid(instance)
+        return super().form_valid(form)
 
     # def get_form(self, form_class=None):
     #     form = super(BookCreateView_Student, self).get_form(form_class=None)
@@ -75,7 +74,6 @@ class BookUpdateView(LoginRequiredMixin, UpdateView):
 class BookDeleteView(DeleteView):
     model = Booking
     template_name = 'delete.html'
-    context_object_name = 'booking'
 
     def get_success_url(self):
         messages.success(self.request, 'Booking deleted successfully')
@@ -104,14 +102,81 @@ class MeetingCreateView(LoginRequiredMixin, CreateView):
 
 
     def get_success_url(self):
-        messages.success(self.request, 'Booking updated successfully')
+        messages.success(self.request, 'Meeting created successfully')
         return reverse('places')
 
 class MeetingListView(LoginRequiredMixin, ListView):
     model = Meeting_Place
-    template_name = 'bookings/meeting_places'
-    context_object_name = 'meeting'
+    template_name = 'bookings/meeting_places.html'
+    context_object_name = 'meetings'
 
+class ReviewCreateView(LoginRequiredMixin, CreateView):
+    model = Review
+    template_name = 'bookings/new_review.html'
+    fields = ['booking', 'overall_rating', 'explanation']
+
+#annotate
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        user_profile = self.request.user.profile
+        instance.reviewer = user_profile
+        if user_profile == instance.booking.student:
+            instance.reviewee = instance.booking.tutor
+        elif user_profile == instance.booking.tutor:
+            instance.reviewee = instance.booking.student
+        instance.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request, 'Review created successfully')
+        return reverse('reviews')
+
+
+
+class ReviewListView(LoginRequiredMixin, ListView):
+    model = Review
+    template_name = 'bookings/reviews.html'
+    context_object_name = 'reviews'
+
+
+class MessageListView(LoginRequiredMixin, ListView):
+    model = Message
+    template_name = 'bookings/messages.html'
+    context_object_name = 'message'
+
+    def get_queryset(self):
+        return Message.objects.filter(recipient=self.request.user.profile)
+
+
+class MessageCreateView(LoginRequiredMixin, CreateView):
+    model = Message
+    template_name = 'bookings/message_form.html'
+    fields = ['recipient', 'content']
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.sender = self.request.user.profile
+        instance.save()
+        return super(MessageCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request, 'Message sent successfully')
+        return reverse('messages')
+
+class OutboxListView(LoginRequiredMixin, ListView):
+    model = Message
+    template_name = 'bookings/outbox.html'
+    context_object_name = 'message'
+
+    def get_queryset(self):
+        return Message.objects.filter(sender=self.request.user.profile).order_by('-sent_at')
+
+
+    # content = models.TextField
+    # sender = models.ForeignKey(User, related_name='sender', on_delete=models.CASCADE)
+    # recipient = models.ForeignKey(User, related_name='recipient', on_delete=models.CASCADE)
+    # sent_at = models.DateTimeField()
 
 # class TutorSearchView(ListView):
 #     model = Profile

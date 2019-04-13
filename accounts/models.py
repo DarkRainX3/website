@@ -65,7 +65,17 @@ class Profile(models.Model):
 
 class Tutor_Verification(models.Model):
     tutor = models.OneToOneField(Profile, primary_key=True, on_delete=models.CASCADE)
-    verification = models.BooleanField(default=False)
+    description = models.CharField(max_length=100, blank=True)
+    image = models.ImageField(default='default.jpg', upload_to='verification')
+
+    def save(self, *args, **kwargs):
+        super(Profile, self).save(*args, **kwargs)
+        img = Image.open(self.image.path)
+
+        if img.height > 500 or img.width > 500:
+            output_size = (500, 500)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
 
 
 class Dependent(models.Model):
@@ -79,6 +89,7 @@ class Dependent(models.Model):
 
     def get_absolute_url(self):
         return reverse('deps', kwargs={'pk': self.pk})
+
 
 #
 # class Tutor_Teach_Student(models.Model): #not sure if this table is correct

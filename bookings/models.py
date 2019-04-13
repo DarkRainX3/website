@@ -5,6 +5,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from datetime import datetime
+from django.db.models import Avg
 #from smart_selects.db_fields import ChainedForeignKey
 
 # Create your models here.
@@ -40,7 +42,7 @@ class Booking(models.Model):
     hours = models.FloatField(default=0)
 
     def __str__(self):
-        return self.id
+        return str(self.pk)
 
     def get_absolute_url(self):
         return reverse('book', kwargs={'pk': self.pk})
@@ -88,30 +90,38 @@ class Invoice(models.Model):
     tax = models.FloatField(default=0)
     total = models.FloatField(default=0)
 
-    # @property
-    # def tax(self):
-    #     return self.booking.price * 0.05
-    #
-    # @property
-    # def total(self):
-    #     return self.booking.price + self.tax
 
     def get_absolute_url(self):
         return reverse('invoice-detail', kwargs={'pk': self.pk})
 
 class Review(models.Model):
     id = models.AutoField(primary_key=True)
-    invoice_id = models.OneToOneField(Invoice, to_field='id', on_delete=models.CASCADE)
-    overall_rating = models.IntegerField(validators=[MaxValueValidator(0), MinValueValidator(5)])
+    booking = models.ForeignKey(Booking, to_field='id', on_delete=models.CASCADE, null=True, unique=True)
+    reviewer = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='reviewer', null=True)
+    reviewee = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='reviewee', null=True)
+    overall_rating = models.IntegerField(validators=[MaxValueValidator(5), MinValueValidator(0)])
     explanation = models.CharField(max_length=250)
 
-class Booking_Message_Logs(models.Model):
-    pass
+    def get_absolute_url(self):
+        return reverse('reviews', kwargs={'pk': self.pk})
 
-class Booking_Offer(models.Model):
-    pass
+
 class Message(models.Model):
-    pass
+    id = models.AutoField(primary_key=True)
+    sender = models.ForeignKey(Profile, related_name='sender', on_delete=models.CASCADE, null=True)
+    recipient = models.ForeignKey(Profile, related_name='recipient', on_delete=models.CASCADE, null=True)
+    content = models.TextField(null=True)
+    sent_at = models.DateTimeField(default=datetime.now, blank=True)
+
+
+    def get_absolute_url(self):
+        return reverse('messages', kwargs={'pk': self.pk})
+
+    def __str__(self):
+        return self.content
+
+
+
 
 class Schedule(models.Model):
     #booking_id = models.ManyToManyField(Booking, )
@@ -125,6 +135,9 @@ class Refund_Request:
     invoice_id = models.OneToOneField(Invoice, to_field='id', on_delete=models.CASCADE)
     reason = models.CharField(max_length=250)
     amount = models.FloatField()
+    status = models.CharField(default='Submitted')
+
+
 
 class Meeting(models.Model):
     pass

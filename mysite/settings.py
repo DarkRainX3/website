@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'bookings',
     'accounts',
+    'debug_toolbar',
     #'djmoney',
     # 'dal',
     # 'dal_select2',
@@ -49,12 +50,14 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -143,3 +146,5 @@ MEDIA_URL = '/media/'  #how to access in the browser
 LOGIN_REDIRECT_URL = '/home/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+INTERNAL_IPS = {'127.0.0.1'}

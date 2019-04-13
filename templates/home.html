@@ -20,6 +20,9 @@
             {% if user.profile.student_flag == 1 %}
              <a href ="{% url 'deps'%}">View/Edit Dependents</a> <br>
             {% endif %}
+            <a href ="{% url 'reviews' %}">See Reviews</a><br>
+            <a href ="{% url 'new-review' %}">Leave Review</a><br>
+            <a href ="{% url 'messages' %}">Inbox</a><br>
                 <br>
             Choose from our possible subjects: <br>
                {% for subject in subjects %}

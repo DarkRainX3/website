@@ -2,9 +2,7 @@
 from django.conf.urls import url
 from django.urls import path
 
-from .views import BookListView, BookCreateView_Student, BookDetailView, \
-    BookUpdateView, BookDeleteView, InvoiceDetailView, InvoiceListView, \
-    MeetingCreateView, MeetingListView
+from .views import *
 
 
 urlpatterns = [
@@ -18,5 +16,10 @@ urlpatterns = [
     path('invoices/<int:pk>/', InvoiceDetailView.as_view(), name='invoice-detail'),
     path('meeting_places/', MeetingListView.as_view(), name='places'),
     path('new_place/', MeetingCreateView.as_view(), name='create-place'),
+    path('new_review/', ReviewCreateView.as_view(), name='new-review'),
+    path('reviews/', ReviewListView.as_view(), name='reviews'),
+    path('new_message/', MessageCreateView.as_view(), name='new-message'),
+    path('messages/', MessageListView.as_view(), name='messages'),
+    path('messages/outbox/', OutboxListView.as_view(), name='messages-outbox'),
 ]
 
