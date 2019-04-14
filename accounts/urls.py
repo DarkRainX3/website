@@ -24,6 +24,4 @@ urlpatterns = [
     path('verification/<int:pk>/', views.VerificationDetailView.as_view(), name='verify'),
     path('new_verification/', views.VerificationCreateView.as_view(), name='verify-form'),
 
-
-
 ]

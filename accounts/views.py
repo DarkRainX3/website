@@ -14,26 +14,29 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import *
 from bookings.models import Review
+from bookings.models import Booking, Review
 
 from django.shortcuts import get_object_or_404
-# Create your views here.
 
+
+# Create your views here.
 
 
 def home(request):
     subjects = Subject.objects.all()
 
-    context = {'subjects':subjects
+    context = {'subjects': subjects
 
-    }
-    return render(request,'home.html', context)
+               }
+    return render(request, 'home.html', context)
+
 
 def new(request):
-    return render(request,'accounts/new.html')
+    return render(request, 'accounts/new.html')
 
 
 def about(request):
-    return render(request,'about.html')
+    return render(request, 'about.html')
 
 
 def register(request):
@@ -84,7 +87,7 @@ def search(request):
         qs = qs.filter(user__first_name__icontains=query).filter(tutor_flag__exact=True)
         subs = subs.filter(subject_creator__first_name__icontains=query)
 
-    context={
+    context = {
         'tutors': qs,
         'subs': subs
     }
@@ -93,7 +96,6 @@ def search(request):
 
 # def subject_search(request):
 #     if request.method == 'POST':
-
 
 
 class SubjectCreateView(LoginRequiredMixin, CreateView):
@@ -111,16 +113,26 @@ class SubjectCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, 'Subjects created successfully')
         return reverse('home_redirect')
 
+
 class SubjectListView(LoginRequiredMixin, ListView):
     model = Known_subject
     template_name = 'accounts/subject_list.html'
     context_object_name = 'subjects'
+
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
     model = Profile
 
     def get_queryset(self):
         return Profile.objects.filter(id=self.kwargs['pk'])
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProfileDetailView, self).get_context_data(*args, **kwargs)
+        context['subjects'] = Known_subject.objects.filter(subject_creator=self.kwargs['pk'])
+        context['times'] = Booking.objects.filter(tutor=self.kwargs['pk']) | \
+                           Booking.objects.filter(student=self.kwargs['pk'])
+        context['reviews'] = Review.objects.filter(reviewee=self.kwargs['pk'])
+        return context
 
     # def get_context_data(self, **kwargs):
     #     context = super(ProfileDetailView, self).get_context_data(**kwargs)
@@ -189,7 +201,6 @@ class VerificationDetailView(LoginRequiredMixin, DetailView):
 
     def get_queryset(self):
         return Tutor_Verification.objects.filter(id=self.kwargs['pk'])
-
 
 # class Subject(models.Model):
 #     name = models.CharField(max_length=50, primary_key=True)

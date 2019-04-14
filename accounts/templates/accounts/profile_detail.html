@@ -36,7 +36,6 @@
         <th>Description</th>
         <th>Education Level</th>
         <th>City</th>
-        <th>Subjects</th>
 
       </tr>
       <tr>
@@ -46,11 +45,64 @@
         <td>{{ profile.description }}</td>
         <td>{{ profile.education_level }}</td>
         <td>{{ profile.city }}</td>
-        <td>{{ profile.subjects}}</td>
       </tr>
 
     </table>
+    <br>
+    <table>
+        <tr>
+        <th>Subject</th>
+        <th>Knowledge Level</th>
+        <th>School</th>
+        <th>GPA</th>
+        <th>Specialty</th>
+        </tr>
+        {% for subject in subjects %}
+            <tr>
+                <td> {{ subject.subject.name }}</td>
+                <td>{{ subject.knowledge_level }}</td>
+                <td>{{ subject.school}}</td>
+                <td>{% if subject.gpa != None %}
+                {{ subject.gpa }}
+                {% endif %} </td>
+                <td>{{ subject.specialty }}</td>
+            </tr>
+        {% endfor %}
+    <br>
+    </table>
+    <br>
+        <b>Unavailable Times</b>
+        <table>
+        <tr>
+        <th>From</th>
+        <th>End</th>
+        </tr>
+        {% for time in times %}
+            <tr>
+                <td>{{ time.start_time }}</td>
+                <td>{{ time.end_time }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+    Reviews
 
+    <table>
+        <tr>
+        <th>Reviewer</th>
+        <th>Date</th>
+        <th>Explanation</th>
+        <th>Rating</th>
+        </tr>
+        {% for review in reviews %}
+            <tr>
+                <td>{{ review.reviewer }}</td>
+                <td>{{ review.booking.end_time}}</td>
+                <td>{{ review.explanation}}</td>
+                <td>{{ review.overall_rating}}</td>
+            </tr>
+        {% endfor %}
+    </table>
 
     </div>
 {% endblock content %}
